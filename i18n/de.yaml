@@ -118,6 +118,15 @@
 - id: reportHeroEyebrow
   translation: "IDiAL Jahresbericht"
 
+- id: reportHeroMediaLabel
+  translation: "Impressionen"
+
+- id: reportHeroMediaAlt
+  translation: "Impression aus dem IDiAL Jahresbericht {{ .Year }}"
+
+- id: reportHeroMediaSlideAria
+  translation: "Bild {{ .Index }} anzeigen"
+
 - id: discoverReport
   translation: "Bericht entdecken"
 

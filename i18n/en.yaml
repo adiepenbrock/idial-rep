@@ -118,6 +118,15 @@
 - id: reportHeroEyebrow
   translation: "IDiAL annual report"
 
+- id: reportHeroMediaLabel
+  translation: "Impressions"
+
+- id: reportHeroMediaAlt
+  translation: "Visual impression from the IDiAL annual report {{ .Year }}"
+
+- id: reportHeroMediaSlideAria
+  translation: "Show image {{ .Index }}"
+
 - id: discoverReport
   translation: "Explore report"
 

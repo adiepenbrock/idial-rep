@@ -95,21 +95,25 @@
     <div class="journey-grid">
       <a href="{{ $latestReportURL }}#highlights" class="journey-card animate-on-scroll">
         <span class="journey-step">01</span>
+        <div class="journey-visual" aria-hidden="true"><span></span><span></span><span></span></div>
         <h3>{{ i18n "sectionHighlights" }}</h3>
         <p>{{ i18n "journeyHighlightsDescription" }}</p>
       </a>
       <a href="{{ $latestReportURL }}#projekte" class="journey-card animate-on-scroll">
         <span class="journey-step">02</span>
+        <div class="journey-visual" aria-hidden="true"><span></span><span></span><span></span></div>
         <h3>{{ i18n "sectionProjects" }}</h3>
         <p>{{ i18n "journeyProjectsDescription" }}</p>
       </a>
       <a href="{{ $latestReportURL }}#zahlen" class="journey-card animate-on-scroll">
         <span class="journey-step">03</span>
+        <div class="journey-visual" aria-hidden="true"><span></span><span></span><span></span></div>
         <h3>{{ i18n "sectionFacts" }}</h3>
         <p>{{ i18n "journeyFactsDescription" }}</p>
       </a>
       <a href="{{ $latestReportURL }}#team" class="journey-card animate-on-scroll">
         <span class="journey-step">04</span>
+        <div class="journey-visual" aria-hidden="true"><span></span><span></span><span></span></div>
         <h3>{{ i18n "journeyTeamTitle" }}</h3>
         <p>{{ i18n "journeyTeamDescription" }}</p>
       </a>
@@ -127,6 +131,7 @@
     <div class="reports-grid">
       {{ range $reports }}
       <article class="report-card report-card-featured animate-on-scroll">
+        <div class="report-card-visual" aria-hidden="true"></div>
         <div class="report-card-year">{{ .Params.year }}</div>
         <h3 class="report-card-title">{{ .Title }}</h3>
         <p class="report-card-tagline">{{ .Params.tagline }}</p>
@@ -137,6 +142,7 @@
       </article>
       {{ else }}
       <article class="report-card report-card-featured">
+        <div class="report-card-visual" aria-hidden="true"></div>
         <div class="report-card-year">--</div>
         <h3 class="report-card-title">{{ i18n "noReportsTitle" }}</h3>
         <p class="report-card-tagline">{{ i18n "noReportsDescription" }}</p>

@@ -260,7 +260,71 @@
   }
 
   /* ----------------------------------------------------------
-     9. Project Tag Filtering + Search
+     9. Random Hero Media Slider
+     ---------------------------------------------------------- */
+  const randomSliders = document.querySelectorAll('[data-random-slider]');
+  randomSliders.forEach(function(slider) {
+    const slides = slider.querySelectorAll('.hero-media-slide');
+    const dots = slider.querySelectorAll('.hero-media-dot');
+    if (slides.length === 0) {
+      return;
+    }
+
+    let currentIndex = Math.floor(Math.random() * slides.length);
+    let intervalId = null;
+
+    function setActiveSlide(index) {
+      slides.forEach(function(slide, slideIndex) {
+        slide.classList.toggle('active', slideIndex === index);
+      });
+
+      dots.forEach(function(dot, dotIndex) {
+        dot.classList.toggle('active', dotIndex === index);
+      });
+    }
+
+    function stopAutoPlay() {
+      if (intervalId) {
+        window.clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+
+    function startAutoPlay() {
+      if (slides.length <= 1 || prefersReducedMotion) {
+        return;
+      }
+
+      stopAutoPlay();
+      intervalId = window.setInterval(function() {
+        currentIndex = (currentIndex + 1) % slides.length;
+        setActiveSlide(currentIndex);
+      }, 5000);
+    }
+
+    setActiveSlide(currentIndex);
+    startAutoPlay();
+
+    slider.addEventListener('mouseenter', stopAutoPlay);
+    slider.addEventListener('mouseleave', startAutoPlay);
+    slider.addEventListener('focusin', stopAutoPlay);
+    slider.addEventListener('focusout', function(e) {
+      if (!slider.contains(e.relatedTarget)) {
+        startAutoPlay();
+      }
+    });
+
+    dots.forEach(function(dot, dotIndex) {
+      dot.addEventListener('click', function() {
+        currentIndex = dotIndex;
+        setActiveSlide(currentIndex);
+        startAutoPlay();
+      });
+    });
+  });
+
+  /* ----------------------------------------------------------
+     10. Project Tag Filtering + Search
      ---------------------------------------------------------- */
   const filterBtns = document.querySelectorAll('.filter-btn');
   const projectCards = document.querySelectorAll('.project-card');
@@ -352,7 +416,7 @@
   }
 
   /* ----------------------------------------------------------
-     10. Highlight Category Filtering
+     11. Highlight Category Filtering
      ---------------------------------------------------------- */
   const timelineFilterBtns = document.querySelectorAll('.timeline-filter-btn');
   const timelineItems = document.querySelectorAll('.timeline-item[data-category]');
@@ -379,7 +443,7 @@
   }
 
   /* ----------------------------------------------------------
-     11. Keyboard accessibility for year selector
+     12. Keyboard accessibility for year selector
      ---------------------------------------------------------- */
   const yearSelectors = document.querySelectorAll('.year-selector');
   yearSelectors.forEach(function(selector) {
@@ -440,7 +504,7 @@
   });
 
   /* ----------------------------------------------------------
-     12. Back-to-top Button
+     13. Back-to-top Button
      ---------------------------------------------------------- */
   const backToTop = document.getElementById('back-to-top');
   if (backToTop) {
@@ -461,7 +525,7 @@
   }
 
   /* ----------------------------------------------------------
-     13. Hero Pointer Motion
+     14. Hero Pointer Motion
      ---------------------------------------------------------- */
   const heroShapes = document.querySelector('.hero-bg-shapes');
   const prefersCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
