@@ -40,7 +40,7 @@
     <h1>{{ .Title }}</h1>
     {{ with .Params.summary }}<p class="project-page-summary">{{ . }}</p>{{ end }}
     <div class="project-actions">
-      <a href="{{ printf "/reports/%s/#projekte" $year | relLangURL }}" class="btn btn-outline">{{ i18n "projectBackToReport" (dict "Year" $year) }}</a>
+      <a href="{{ printf "reports/%s/#projekte" $year | relLangURL }}" class="btn btn-outline">{{ i18n "projectBackToReport" (dict "Year" $year) }}</a>
       {{ with .Params.external_url }}<a href="{{ . }}" target="_blank" rel="noopener" class="btn btn-primary">{{ i18n "projectWebsite" }}</a>{{ end }}
     </div>
   </div>

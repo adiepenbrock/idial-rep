@@ -1,6 +1,7 @@
+{{ $reportPages := sort (where .Site.RegularPages "Section" "reports") "Params.year" "desc" }}
 <header class="site-header" id="site-header">
   <nav class="nav-container">
-    <a href="{{ "/" | relLangURL }}" class="nav-logo" aria-label="{{ i18n "navHomeAria" }}">
+    <a href="{{ .Site.Home.RelPermalink }}" class="nav-logo" aria-label="{{ i18n "navHomeAria" }}">
       <span class="logo-accent">IDiAL</span>
       <span class="logo-text">{{ i18n "brandReport" }}</span>
     </a>
@@ -17,16 +18,14 @@
           <div class="year-selector">
             <button type="button" class="year-current" aria-expanded="false" aria-controls="year-dropdown" aria-label="{{ i18n "yearSelectorAria" }}">{{ if .Params.year }}{{ .Params.year }}{{ else }}{{ i18n "reportsMenuLabel" }}{{ end }}</button>
             <ul class="year-dropdown" id="year-dropdown">
-              {{ range .Site.Menus.main }}
-                {{ if ne .URL "/reports/" }}
-                <li><a href="{{ .URL | relLangURL }}">{{ .Name }}</a></li>
-                {{ end }}
+              {{ range $reportPages }}
+                <li><a href="{{ .RelPermalink }}">{{ .Params.year }}</a></li>
               {{ end }}
             </ul>
           </div>
         </li>
-        <li><a href="{{ "/projects/" | relLangURL }}" class="nav-link">{{ i18n "projectsNav" }}</a></li>
-        <li><a href="{{ "/reports/" | relLangURL }}" class="nav-link nav-link-archive">{{ i18n "allReports" }}</a></li>
+        <li><a href="{{ "projects/" | relLangURL }}" class="nav-link">{{ i18n "projectsNav" }}</a></li>
+        <li><a href="{{ "reports/" | relLangURL }}" class="nav-link nav-link-archive">{{ i18n "allReports" }}</a></li>
         {{ if gt (len .AllTranslations) 1 }}
         <li class="language-switcher" aria-label="{{ i18n "languageSwitcher" }}">
           {{ range .AllTranslations }}

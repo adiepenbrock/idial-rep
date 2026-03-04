@@ -1,3 +1,4 @@
+{{ $reportPages := sort (where .Site.RegularPages "Section" "reports") "Params.year" "desc" }}
 <footer class="site-footer">
   <div class="footer-container">
     <div class="footer-brand">
@@ -15,13 +16,11 @@
       <div class="footer-col">
         <h4>{{ i18n "reportsMenuLabel" }}</h4>
         <ul>
-          {{ range .Site.Menus.main }}
-            {{ if ne .URL "/reports/" }}
-            <li><a href="{{ .URL | relLangURL }}">{{ i18n "reportWithYear" (dict "Year" .Name) }}</a></li>
-            {{ end }}
+          {{ range $reportPages }}
+            <li><a href="{{ .RelPermalink }}">{{ i18n "reportWithYear" (dict "Year" .Params.year) }}</a></li>
           {{ end }}
-          <li><a href="{{ "/projects/" | relLangURL }}">{{ i18n "projectsNav" }}</a></li>
-          <li><a href="{{ "/reports/" | relLangURL }}">{{ i18n "allReports" }}</a></li>
+          <li><a href="{{ "projects/" | relLangURL }}">{{ i18n "projectsNav" }}</a></li>
+          <li><a href="{{ "reports/" | relLangURL }}">{{ i18n "allReports" }}</a></li>
         </ul>
       </div>
       <div class="footer-col">

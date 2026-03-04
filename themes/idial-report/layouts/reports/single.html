@@ -75,7 +75,7 @@
           {{ range $spotIndex, $spotProject := $activeProjects }}
           {{ $spotURL := "#projekte" }}
           {{ with $spotProject.slug }}
-            {{ $spotURL = printf "/projects/%s/" . | relLangURL }}
+            {{ $spotURL = printf "projects/%s/" . | relLangURL }}
           {{ end }}
           <a href="{{ $spotURL }}" class="hero-spotlight-item{{ if eq $spotIndex 0 }} active{{ end }}">
             <span class="hero-spotlight-kicker">{{ i18n "projectSpotlightKicker" (dict "Year" $year) }}</span>
@@ -369,7 +369,7 @@
         {{ if or .slug .url }}
         <div class="project-actions">
           {{ with .slug }}
-          <a href="{{ printf "/projects/%s/" . | relLangURL }}" class="project-link">{{ i18n "projectDetails" }} &rarr;</a>
+          <a href="{{ printf "projects/%s/" . | relLangURL }}" class="project-link">{{ i18n "projectDetails" }} &rarr;</a>
           {{ end }}
           {{ with .url }}
           <a href="{{ . }}" class="project-link project-link-secondary" target="_blank" rel="noopener">{{ i18n "projectWebsite" }} &rarr;</a>
@@ -514,7 +514,7 @@
       <p>{{ i18n "contactDescription" }}</p>
       <div class="cta-actions">
         <a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener" class="btn btn-primary btn-large">{{ i18n "contactInstitute" }}</a>
-        <a href="{{ "/reports/" | relLangURL }}" class="btn btn-outline-light">{{ i18n "otherReports" }}</a>
+        <a href="{{ "reports/" | relLangURL }}" class="btn btn-outline-light">{{ i18n "otherReports" }}</a>
       </div>
     </div>
   </div>
