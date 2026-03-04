@@ -268,6 +268,21 @@
 - id: projectDetails
   translation: "Project details"
 
+- id: projectSpotlightLabel
+  translation: "Project spotlight"
+
+- id: projectSpotlightKicker
+  translation: "Active in report {{ .Year }}"
+
+- id: projectSpotlightPrevAria
+  translation: "Show previous project"
+
+- id: projectSpotlightNextAria
+  translation: "Show next project"
+
+- id: projectSpotlightRandomAria
+  translation: "Show random project"
+
 - id: projectDetailLabel
   translation: "Project profile"
 

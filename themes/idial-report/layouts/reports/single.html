@@ -13,6 +13,15 @@
 {{ $reportPdfURL := .Params.pdf_url }}
 {{ $heroSummary := .Params.summary | default .Description | default .Site.Params.description }}
 {{ $heroImages := .Params.hero_images | default (slice) }}
+{{ $activeProjects := slice }}
+{{ if $hasProjects }}
+  {{ range $data.projects }}
+    {{ $status := .status | lower }}
+    {{ if or (eq $status "laufend") (eq $status "ongoing") }}
+      {{ $activeProjects = $activeProjects | append . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
 
 <!-- Report Hero -->
 <section class="report-hero" id="hero">
@@ -43,6 +52,51 @@
     </div>
 
     <div class="hero-bento-grid" aria-label="{{ i18n "factsTitle" (dict "Year" $year) }}">
+      {{ if gt (len $activeProjects) 0 }}
+      <article class="hero-bento-card hero-bento-card-spotlight" data-project-spotlight>
+        <div class="hero-bento-head">
+          <div class="hero-bento-label">{{ i18n "projectSpotlightLabel" }}</div>
+        </div>
+        {{ if gt (len $activeProjects) 1 }}
+        <div class="hero-spotlight-controls">
+          <button type="button" class="hero-spotlight-control" data-spotlight-random aria-label="{{ i18n "projectSpotlightRandomAria" }}">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+              <rect x="3.5" y="3.5" width="17" height="17" rx="3" ry="3" fill="none" stroke="currentColor" stroke-width="2"></rect>
+              <circle cx="8" cy="8" r="1.25" fill="currentColor"></circle>
+              <circle cx="16" cy="8" r="1.25" fill="currentColor"></circle>
+              <circle cx="12" cy="12" r="1.25" fill="currentColor"></circle>
+              <circle cx="8" cy="16" r="1.25" fill="currentColor"></circle>
+              <circle cx="16" cy="16" r="1.25" fill="currentColor"></circle>
+            </svg>
+          </button>
+        </div>
+        {{ end }}
+        <div class="hero-spotlight-items">
+          {{ range $spotIndex, $spotProject := $activeProjects }}
+          {{ $spotURL := "#projekte" }}
+          {{ with $spotProject.slug }}
+            {{ $spotURL = printf "/projects/%s/" . | relLangURL }}
+          {{ end }}
+          <a href="{{ $spotURL }}" class="hero-spotlight-item{{ if eq $spotIndex 0 }} active{{ end }}">
+            <span class="hero-spotlight-kicker">{{ i18n "projectSpotlightKicker" (dict "Year" $year) }}</span>
+            <h3 class="hero-spotlight-title">{{ $spotProject.title }}</h3>
+            {{ with $spotProject.impact }}
+            <p class="hero-spotlight-text">{{ . | truncate 120 }}</p>
+            {{ else }}
+            {{ with $spotProject.description }}<p class="hero-spotlight-text">{{ . | truncate 120 }}</p>{{ end }}
+            {{ end }}
+            {{ with $spotProject.tags }}
+            <div class="hero-spotlight-tags">
+              {{ range first 2 . }}<span>{{ . }}</span>{{ end }}
+            </div>
+            {{ end }}
+            <span class="hero-spotlight-link">{{ i18n "projectDetails" }} &rarr;</span>
+          </a>
+          {{ end }}
+        </div>
+      </article>
+      {{ end }}
+
       {{ if $hasStats }}
       {{ range first 1 $data.stats }}
       <article class="hero-bento-card hero-bento-card-feature">
@@ -113,23 +167,22 @@
       </article>
     </div>
   </div>
-</section>
 
-<!-- Quick Stats Bar -->
-{{ if $hasStats }}
-<div class="stats-bar">
-  <div class="container">
-    <div class="stats-bar-inner">
-      {{ range $data.stats }}
-      <div class="stat-bar-item">
-        <span class="stat-bar-value counter" data-target="{{ .value }}">{{ .value }}</span>
-        <span class="stat-bar-label">{{ .label }}</span>
+  {{ if $hasStats }}
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stats-bar-inner">
+        {{ range $data.stats }}
+        <div class="stat-bar-item">
+          <span class="stat-bar-value counter" data-target="{{ .value }}">{{ .value }}</span>
+          <span class="stat-bar-label">{{ .label }}</span>
+        </div>
+        {{ end }}
       </div>
-      {{ end }}
     </div>
   </div>
-</div>
-{{ end }}
+  {{ end }}
+</section>
 
 <nav class="report-side-nav report-side-nav-left" aria-label="{{ i18n "reportNavLabel" }}">
   <a href="#vorwort" class="report-float-link">{{ i18n "sectionForeword" }}</a>

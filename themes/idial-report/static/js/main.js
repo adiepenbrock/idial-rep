@@ -337,7 +337,51 @@
   });
 
   /* ----------------------------------------------------------
-     10. Project Tag Filtering + Search
+     10. Project Spotlight Switcher
+     ---------------------------------------------------------- */
+  const spotlightCards = document.querySelectorAll('[data-project-spotlight]');
+  spotlightCards.forEach(function(card) {
+    const items = card.querySelectorAll('.hero-spotlight-item');
+    const randomControl = card.querySelector('[data-spotlight-random]');
+    if (items.length === 0) {
+      return;
+    }
+
+    let currentIndex = Math.floor(Math.random() * items.length);
+
+    function setActiveSpotlight(index) {
+      items.forEach(function(item, itemIndex) {
+        const isActive = itemIndex === index;
+        item.classList.toggle('active', isActive);
+        item.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      });
+    }
+
+    function goToSpotlight(nextIndex) {
+      currentIndex = (nextIndex + items.length) % items.length;
+      setActiveSpotlight(currentIndex);
+    }
+
+    setActiveSpotlight(currentIndex);
+
+    if (randomControl) {
+      randomControl.addEventListener('click', function() {
+        if (items.length <= 1) {
+          return;
+        }
+
+        let nextIndex = currentIndex;
+        while (nextIndex === currentIndex) {
+          nextIndex = Math.floor(Math.random() * items.length);
+        }
+
+        goToSpotlight(nextIndex);
+      });
+    }
+  });
+
+  /* ----------------------------------------------------------
+     11. Project Tag Filtering + Search
      ---------------------------------------------------------- */
   const filterBtns = document.querySelectorAll('.filter-btn');
   const projectCards = document.querySelectorAll('.project-card');
@@ -429,7 +473,7 @@
   }
 
   /* ----------------------------------------------------------
-     11. Highlight Category Filtering
+     12. Highlight Category Filtering
      ---------------------------------------------------------- */
   const timelineFilterBtns = document.querySelectorAll('.timeline-filter-btn');
   const timelineItems = document.querySelectorAll('.timeline-item[data-category]');
@@ -456,7 +500,7 @@
   }
 
   /* ----------------------------------------------------------
-     12. Keyboard accessibility for year selector
+     13. Keyboard accessibility for year selector
      ---------------------------------------------------------- */
   const yearSelectors = document.querySelectorAll('.year-selector');
   yearSelectors.forEach(function(selector) {
@@ -517,7 +561,7 @@
   });
 
   /* ----------------------------------------------------------
-     13. Back-to-top Button
+     14. Back-to-top Button
      ---------------------------------------------------------- */
   const backToTop = document.getElementById('back-to-top');
   if (backToTop) {
@@ -538,7 +582,7 @@
   }
 
   /* ----------------------------------------------------------
-     14. Hero Pointer Motion
+     15. Hero Pointer Motion
      ---------------------------------------------------------- */
   const heroShapes = document.querySelector('.hero-bg-shapes');
   const prefersCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
