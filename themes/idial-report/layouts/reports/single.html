@@ -1,0 +1,315 @@
+{{ define "main" }}
+{{ $year := .Params.year }}
+{{ $data := index .Site.Data.reports $year }}
+
+<!-- Report Hero -->
+<section class="report-hero" id="hero">
+  <div class="hero-bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  <div class="report-hero-content">
+    <div class="hero-eyebrow">IDiAL Jahresbericht</div>
+    <div class="hero-year-badge">{{ $year }}</div>
+    <h1 class="report-hero-title">{{ .Params.tagline }}</h1>
+    <p class="report-hero-subtitle">{{ .Site.Params.instituteFullName }}<br>{{ .Site.Params.university }}</p>
+    <div class="hero-scroll-cta">
+      <a href="#vorwort" class="hero-scroll-link">
+        <span>Bericht entdecken</span>
+        <div class="scroll-indicator">
+          <div class="scroll-indicator-dot"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="hero-stats-preview">
+    {{ if $data }}
+    {{ range first 3 $data.stats }}
+    <div class="hero-stat">
+      <div class="hero-stat-value" data-target="{{ .value }}">{{ .value }}</div>
+      <div class="hero-stat-label">{{ .label }}</div>
+    </div>
+    {{ end }}
+    {{ end }}
+  </div>
+</section>
+
+<!-- Quick Stats Bar -->
+{{ if $data }}
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-bar-inner">
+      {{ range $data.stats }}
+      <div class="stat-bar-item">
+        <span class="stat-bar-value counter" data-target="{{ .value }}">{{ .value }}</span>
+        <span class="stat-bar-label">{{ .label }}</span>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}
+
+<!-- Foreword / Vorwort -->
+<section class="report-section section-vorwort" id="vorwort">
+  <div class="container">
+    <div class="vorwort-grid">
+      <div class="vorwort-image-col">
+        <div class="vorwort-image-wrapper">
+          {{ if .Params.foreword_image }}
+          <img src="{{ .Params.foreword_image }}" alt="{{ .Params.foreword_author }}" class="vorwort-image">
+          {{ else }}
+          <div class="vorwort-image-placeholder">
+            <div class="placeholder-initials">{{ with .Params.foreword_author }}{{ substr . 0 1 | upper }}{{ end }}</div>
+          </div>
+          {{ end }}
+          <div class="vorwort-author-card">
+            <strong>{{ .Params.foreword_author | default "Institutsleitung" }}</strong>
+            <span>{{ .Params.foreword_title | default "Institut für die Digitalisierung von Arbeits- und Lebenswelten" }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="vorwort-text-col">
+        <div class="section-label">Vorwort</div>
+        <h2>{{ .Params.vorwort_title | default (printf "Sehr geehrte Damen und Herren,") }}</h2>
+        <div class="vorwort-text">
+          {{ .Params.foreword | markdownify }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Highlights -->
+{{ if $data }}
+{{ if $data.highlights }}
+<section class="report-section section-highlights section-dark" id="highlights">
+  <div class="container">
+    <div class="section-header section-header-light">
+      <div class="section-label">{{ $year }} im Rückblick</div>
+      <h2>Highlights des Jahres</h2>
+      <p>Die wichtigsten Meilensteine und Ereignisse des Jahres {{ $year }} auf einen Blick.</p>
+    </div>
+    <div class="timeline">
+      {{ range $index, $item := $data.highlights }}
+      <div class="timeline-item {{ if eq (mod $index 2) 0 }}timeline-item-right{{ else }}timeline-item-left{{ end }} animate-on-scroll">
+        <div class="timeline-marker">
+          <div class="timeline-dot"></div>
+          <div class="timeline-date">{{ $item.date }}</div>
+        </div>
+        <div class="timeline-content">
+          {{ with $item.category }}<div class="timeline-category">{{ . }}</div>{{ end }}
+          <h3 class="timeline-title">{{ $item.title }}</h3>
+          <p class="timeline-text">{{ $item.description }}</p>
+          {{ with $item.link }}
+          <a href="{{ . }}" class="timeline-link" target="_blank" rel="noopener">Mehr erfahren &rarr;</a>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}
+
+<!-- Projects / Forschungsprojekte -->
+{{ if $data }}
+{{ if $data.projects }}
+<section class="report-section section-projekte" id="projekte">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Forschung</div>
+      <h2>Projekte {{ $year }}</h2>
+      <p>Unsere laufenden und abgeschlossenen Forschungsprojekte – von der Grundlagenforschung bis zur anwendungsnahen Entwicklung.</p>
+    </div>
+    <div class="projects-filter" id="projects-filter">
+      <button class="filter-btn active" data-filter="all">Alle</button>
+      {{ $tags := slice }}
+      {{ range $data.projects }}
+        {{ range .tags }}
+          {{ if not (in $tags .) }}
+            {{ $tags = $tags | append . }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+      {{ range $tags }}
+      <button class="filter-btn" data-filter="{{ . | lower | replaceRE " " "-" }}">{{ . }}</button>
+      {{ end }}
+    </div>
+    <div class="projects-grid" id="projects-grid">
+      {{ range $data.projects }}
+      <article class="project-card animate-on-scroll" data-tags="{{ range .tags }}{{ . | lower | replaceRE " " "-" }} {{ end }}">
+        <div class="project-card-header">
+          {{ with .category }}<div class="project-category">{{ . }}</div>{{ end }}
+          {{ with .status }}
+          <div class="project-status project-status-{{ . | lower }}">
+            {{ if eq . "laufend" }}Laufend{{ else if eq . "abgeschlossen" }}Abgeschlossen{{ else }}{{ . }}{{ end }}
+          </div>
+          {{ end }}
+        </div>
+        <h3 class="project-title">{{ .title }}</h3>
+        <p class="project-description">{{ .description }}</p>
+        <div class="project-meta">
+          {{ with .funding }}<div class="project-meta-item"><span class="meta-label">Förderung</span><span class="meta-value">{{ . }}</span></div>{{ end }}
+          {{ with .duration }}<div class="project-meta-item"><span class="meta-label">Laufzeit</span><span class="meta-value">{{ . }}</span></div>{{ end }}
+        </div>
+        {{ with .tags }}
+        <div class="project-tags">
+          {{ range . }}<span class="tag">{{ . }}</span>{{ end }}
+        </div>
+        {{ end }}
+        {{ with .url }}
+        <a href="{{ . }}" class="project-link" target="_blank" rel="noopener">Projektseite &rarr;</a>
+        {{ end }}
+      </article>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}
+
+<!-- Zahlen & Fakten -->
+{{ if $data }}
+{{ if $data.stats }}
+<section class="report-section section-zahlen section-accent" id="zahlen">
+  <div class="container">
+    <div class="section-header section-header-light">
+      <div class="section-label">Überblick</div>
+      <h2>Zahlen &amp; Fakten {{ $year }}</h2>
+      <p>Unser Institut in Zahlen &ndash; eine Übersicht der wichtigsten Kennzahlen des Jahres {{ $year }}.</p>
+    </div>
+    <div class="stats-grid">
+      {{ range $data.stats }}
+      <div class="stat-card animate-on-scroll">
+        <div class="stat-icon">
+          {{ if .icon }}
+          <img src="/images/icons/{{ .icon }}.svg" alt="" aria-hidden="true" width="40" height="40">
+          {{ else }}
+          <div class="stat-icon-placeholder"></div>
+          {{ end }}
+        </div>
+        <div class="stat-value counter" data-target="{{ .value }}" {{ if .suffix }}data-suffix="{{ .suffix }}"{{ end }}>{{ .value }}{{ .suffix }}</div>
+        <div class="stat-label">{{ .label }}</div>
+        {{ with .description }}<div class="stat-description">{{ . }}</div>{{ end }}
+      </div>
+      {{ end }}
+    </div>
+    {{ with $data.annual_totals }}
+    <div class="annual-totals">
+      {{ range . }}
+      <div class="annual-total-item">
+        <div class="annual-total-label">{{ .label }}</div>
+        <div class="annual-total-bar">
+          <div class="annual-total-fill" data-width="{{ .percentage }}"></div>
+        </div>
+        <div class="annual-total-value">{{ .value }}</div>
+      </div>
+      {{ end }}
+    </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+{{ end }}
+
+<!-- Team -->
+{{ if $data }}
+{{ if $data.team }}
+<section class="report-section section-team" id="team">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Menschen</div>
+      <h2>Unser Team</h2>
+      <p>Die Menschen hinter IDiAL &ndash; Wissenschaftlerinnen und Wissenschaftler, die täglich an der Digitalisierung von morgen arbeiten.</p>
+    </div>
+    <div class="team-grid">
+      {{ range $data.team }}
+      <div class="team-card animate-on-scroll">
+        {{ if .image }}
+        <img src="{{ .image }}" alt="{{ .name }}" class="team-image">
+        {{ else }}
+        <div class="team-image-placeholder">
+          <span>{{ substr (.name | upper) 0 2 }}</span>
+        </div>
+        {{ end }}
+        <div class="team-info">
+          <h3 class="team-name">{{ .name }}</h3>
+          <div class="team-role">{{ .role }}</div>
+          {{ with .area }}<div class="team-area">{{ . }}</div>{{ end }}
+          {{ with .email }}<a href="mailto:{{ . }}" class="team-email">{{ . }}</a>{{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}
+
+<!-- Partner -->
+{{ if $data }}
+{{ if $data.partners }}
+<section class="report-section section-partner section-light" id="partner">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Netzwerk</div>
+      <h2>Kooperationen &amp; Partner</h2>
+      <p>IDiAL arbeitet mit Unternehmen, Institutionen und Organisationen aus Wirtschaft, Gesellschaft und Wissenschaft zusammen.</p>
+    </div>
+    <div class="partner-categories">
+      {{ range $data.partners }}
+      <div class="partner-category">
+        <h3 class="partner-category-title">{{ .category }}</h3>
+        <div class="partner-logos">
+          {{ range .items }}
+          <div class="partner-item animate-on-scroll">
+            {{ if .logo }}
+            <a href="{{ with .url }}{{ . }}{{ else }}#{{ end }}" {{ with .url }}target="_blank" rel="noopener"{{ end }} title="{{ .name }}">
+              <img src="{{ .logo }}" alt="{{ .name }}" class="partner-logo">
+            </a>
+            {{ else }}
+            <div class="partner-name-only">{{ .name }}</div>
+            {{ end }}
+          </div>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}
+
+<!-- Content from markdown body -->
+{{ if .Content }}
+<section class="report-section section-content">
+  <div class="container">
+    <div class="content-body">{{ .Content }}</div>
+  </div>
+</section>
+{{ end }}
+
+<!-- CTA / Contact -->
+<section class="report-section section-cta section-dark">
+  <div class="container">
+    <div class="cta-content">
+      <div class="section-label">Kontakt</div>
+      <h2>Interesse an einer Zusammenarbeit?</h2>
+      <p>Wir freuen uns über Kooperationsanfragen, Projektideen und den Austausch mit Wirtschaft, Politik und Gesellschaft.</p>
+      <div class="cta-actions">
+        <a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener" class="btn btn-primary btn-large">IDiAL kontaktieren</a>
+        <a href="/reports/" class="btn btn-outline-light">Weitere Berichte</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Pass report year to JS for any year-specific behavior
+window.reportYear = "{{ $year }}";
+</script>
+{{ end }}

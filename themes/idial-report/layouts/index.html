@@ -1,0 +1,95 @@
+{{ define "main" }}
+{{ $latestYear := .Site.Params.latestReport }}
+<section class="home-hero">
+  <div class="hero-bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Interaktiver Jahresbericht</div>
+    <h1 class="hero-title">
+      <span class="hero-title-institute">IDiAL</span>
+      <span class="hero-title-year">{{ $latestYear }}</span>
+    </h1>
+    <p class="hero-subtitle">{{ .Site.Params.instituteFullName }}</p>
+    <p class="hero-description">Entdecken Sie unsere Forschung, Projekte und Ergebnisse des Jahres {{ $latestYear }} – interaktiv und ansprechend aufbereitet.</p>
+    <div class="hero-actions">
+      <a href="/reports/{{ $latestYear }}/" class="btn btn-primary btn-large">
+        Jahresbericht {{ $latestYear }} entdecken
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+      <a href="/reports/" class="btn btn-outline">Alle Berichte</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Scrollen</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<section class="home-about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text">
+        <div class="section-label">Das Institut</div>
+        <h2>Digitalisierung gestalten &ndash; <br>Zukunft schaffen</h2>
+        <p>Das IDiAL (Institut für die Digitalisierung von Arbeits- und Lebenswelten) an der Fachhochschule Dortmund entwickelt wissenschaftliche Erkenntnisse und Lösungen, um Chancen zu nutzen und Herausforderungen des gesellschaftlichen und wirtschaftlichen Wandels zu begegnen.</p>
+        <a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener" class="btn btn-ghost">Mehr über IDiAL</a>
+      </div>
+      <div class="about-focus">
+        <h3>Forschungsschwerpunkte</h3>
+        <ul class="focus-list">
+          <li class="focus-item">
+            <div class="focus-icon">&#x1F916;</div>
+            <div>
+              <strong>Autonome Mobile Systeme</strong>
+              <p>Robotik, KI und automatisierte Prozesse</p>
+            </div>
+          </li>
+          <li class="focus-item">
+            <div class="focus-icon">&#x1F4BB;</div>
+            <div>
+              <strong>Digitale Arbeitswelten</strong>
+              <p>Transformation von Arbeit und Organisation</p>
+            </div>
+          </li>
+          <li class="focus-item">
+            <div class="focus-icon">&#x1F4A1;</div>
+            <div>
+              <strong>User Innovation</strong>
+              <p>Nutzerintegration in Innovationsprozesse</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="home-reports-preview">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Jahresberichte</div>
+      <h2>Unsere Berichte</h2>
+      <p>Erfahren Sie mehr über unsere Arbeit und Ergebnisse der vergangenen Jahre.</p>
+    </div>
+    <div class="reports-grid">
+      {{ range .Site.RegularPages }}
+        {{ if eq .Section "reports" }}
+        <article class="report-card report-card-featured">
+          <div class="report-card-year">{{ .Params.year }}</div>
+          <h3 class="report-card-title">{{ .Title }}</h3>
+          <p class="report-card-tagline">{{ .Params.tagline }}</p>
+          <a href="{{ .RelPermalink }}" class="report-card-link">
+            Bericht ansehen
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </article>
+        {{ end }}
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

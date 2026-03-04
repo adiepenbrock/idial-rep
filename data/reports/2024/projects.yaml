@@ -1,0 +1,56 @@
+# Forschungsprojekte 2024
+# Bitte mit tatsächlichen Projekten aus dem Jahresbericht befüllen
+
+- title: "KI-Assistenz in der betrieblichen Praxis (KIAP)"
+  category: "Digitale Arbeit"
+  status: "laufend"
+  description: "Untersuchung der Einführung und Nutzung KI-gestützter Assistenzsysteme in kleinen und mittleren Unternehmen. Fokus auf Akzeptanz, Kompetenzentwicklung und betrieblicher Integration."
+  funding: "BMBF"
+  duration: "2023–2026"
+  tags: ["KI", "Arbeit", "KMU"]
+  url: ""
+
+- title: "Autonome Mobile Robotik (AMR-NRW)"
+  category: "Robotik & Automatisierung"
+  status: "laufend"
+  description: "Entwicklung und Erprobung autonomer mobiler Robotiksysteme für Intralogistik und Produktionsumgebungen in Kooperation mit regionalen Industriepartnern. Das Projekt adressiert Sicherheit, Mensch-Roboter-Interaktion und Wirtschaftlichkeit."
+  funding: "Landes NRW / EU-Regionalfonds"
+  duration: "2022–2025"
+  tags: ["Robotik", "Automatisierung", "Industrie"]
+  url: ""
+
+- title: "Plattformökonomie und Arbeit (PLAT-WORK)"
+  category: "Digitale Arbeit"
+  status: "laufend"
+  description: "Empirische Studie zu Arbeitsbedingungen in plattformvermittelten Beschäftigungsformen (Gig Economy). Ziel ist die Entwicklung von Gestaltungsempfehlungen für faire und nachhaltige Plattformarbeit."
+  funding: "Hans-Böckler-Stiftung"
+  duration: "2023–2025"
+  tags: ["Plattformarbeit", "Arbeit", "Recht"]
+  url: ""
+
+- title: "User Innovation im Gesundheitswesen (INNOV-HEALTH)"
+  category: "User Innovation"
+  status: "laufend"
+  description: "Einbindung von Patientinnen und Patienten sowie medizinischem Personal in die Entwicklung digitaler Gesundheitslösungen. Das Projekt entwickelt methodische Grundlagen für gesundheitliche Ko-Innovation."
+  funding: "EU Horizon"
+  duration: "2024–2027"
+  tags: ["Gesundheit", "User Innovation", "Ko-Produktion"]
+  url: ""
+
+- title: "Digitale Transformation im Einzelhandel (DiTEx)"
+  category: "Digitale Transformation"
+  status: "abgeschlossen"
+  description: "Analyse der digitalen Transformationspfade stationärer Einzelhändler in der Region Dortmund. Erarbeitung praxistauglicher Empfehlungen für KMU zur Nutzung digitaler Technologien."
+  funding: "Wirtschaftsförderung Dortmund"
+  duration: "2022–2024"
+  tags: ["Handel", "Transformation", "KMU"]
+  url: ""
+
+- title: "Smarte Lernumgebungen in der Hochschule (SMART-LEARN)"
+  category: "Digitale Bildung"
+  status: "abgeschlossen"
+  description: "Entwicklung und Evaluation adaptiver digitaler Lernumgebungen für die Hochschullehre. Pilotierung an der FH Dortmund mit Studierenden aus verschiedenen Fachbereichen."
+  funding: "Stiftung Innovation in der Hochschullehre"
+  duration: "2021–2024"
+  tags: ["Bildung", "E-Learning", "Hochschule"]
+  url: ""

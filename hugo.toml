@@ -1,0 +1,29 @@
+# baseURL is overridden by the GitHub Actions workflow via --baseURL flag.
+# Set this to your custom domain if you configure one in GitHub Pages settings,
+# or leave as-is for automatic detection. For local dev, use: hugo server
+baseURL = 'https://jahresbericht.idial.institute/'
+languageCode = 'de'
+defaultContentLanguage = 'de'
+title = 'IDiAL Jahresbericht'
+theme = 'idial-report'
+
+[params]
+  description = "Interaktiver Jahresbericht des Instituts für die Digitalisierung von Arbeits- und Lebenswelten (IDiAL) an der FH Dortmund"
+  latestReport = "2024"
+  instituteFullName = "Institut für die Digitalisierung von Arbeits- und Lebenswelten"
+  instituteShortName = "IDiAL"
+  university = "Fachhochschule Dortmund"
+  universityURL = "https://www.fh-dortmund.de"
+
+[[menus.main]]
+  name = "Jahresberichte"
+  url = "/reports/"
+  weight = 10
+
+[[menus.main]]
+  name = "2024"
+  url = "/reports/2024/"
+  weight = 20
+
+[markup.goldmark.renderer]
+  unsafe = true

@@ -1,0 +1,38 @@
+# Wissenschaftliches Team 2024
+# Bitte mit tatsächlichen Teammitgliedern befüllen
+
+- name: "Prof. Dr. Vorname Nachname"
+  role: "Institutsdirektor/in"
+  area: "Digitale Transformation & Forschungsleitung"
+  image: ""
+  email: ""
+
+- name: "Dr. Vorname Nachname"
+  role: "Wissenschaftliche/r Mitarbeiter/in"
+  area: "Autonome Mobile Systeme"
+  image: ""
+  email: ""
+
+- name: "Dr. Vorname Nachname"
+  role: "Wissenschaftliche/r Mitarbeiter/in"
+  area: "Digitale Arbeit & Plattformökonomie"
+  image: ""
+  email: ""
+
+- name: "M.Sc. Vorname Nachname"
+  role: "Wissenschaftliche/r Mitarbeiter/in"
+  area: "User Innovation & Ko-Produktion"
+  image: ""
+  email: ""
+
+- name: "M.A. Vorname Nachname"
+  role: "Wissenschaftliche/r Mitarbeiter/in"
+  area: "Digitale Bildung & Hochschullehre"
+  image: ""
+  email: ""
+
+- name: "M.Eng. Vorname Nachname"
+  role: "Wissenschaftliche/r Mitarbeiter/in"
+  area: "Robotik & Automatisierung"
+  image: ""
+  email: ""

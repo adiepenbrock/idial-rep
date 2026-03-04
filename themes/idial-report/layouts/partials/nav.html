@@ -1,0 +1,51 @@
+<header class="site-header" id="site-header">
+  <nav class="nav-container">
+    <a href="/" class="nav-logo" aria-label="IDiAL Jahresbericht Startseite">
+      <span class="logo-accent">IDiAL</span>
+      <span class="logo-text">Jahresbericht</span>
+    </a>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Navigation öffnen" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-menu" id="nav-menu">
+      {{ if .Params.year }}
+      <!-- In-page section navigation (only on report pages) -->
+      <ul class="nav-sections" id="nav-sections">
+        <li><a href="#vorwort" class="nav-section-link">Vorwort</a></li>
+        <li><a href="#highlights" class="nav-section-link">Highlights</a></li>
+        <li><a href="#projekte" class="nav-section-link">Projekte</a></li>
+        <li><a href="#zahlen" class="nav-section-link">Zahlen</a></li>
+        <li><a href="#team" class="nav-section-link">Team</a></li>
+        <li><a href="#partner" class="nav-section-link">Partner</a></li>
+      </ul>
+      <div class="nav-divider"></div>
+      {{ end }}
+
+      <ul class="nav-links">
+        <li>
+          <div class="year-selector">
+            <span class="year-current">{{ if .Params.year }}{{ .Params.year }}{{ else }}Berichte{{ end }}</span>
+            <ul class="year-dropdown">
+              {{ range .Site.Menus.main }}
+                {{ if ne .Name "Jahresberichte" }}
+                <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+                {{ end }}
+              {{ end }}
+            </ul>
+          </div>
+        </li>
+        <li><a href="/reports/" class="nav-link nav-link-archive">Alle Berichte</a></li>
+        <li>
+          <a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener" class="nav-link nav-link-external">
+            idial.institute
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

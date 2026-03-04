@@ -1,0 +1,27 @@
+# Kennzahlen IDiAL 2024
+# Bitte mit tatsächlichen Zahlen aus dem Jahresbericht befüllen
+
+- label: "Mitarbeitende"
+  value: 58
+  description: "Wissenschaftliche und technische Mitarbeitende am Institut"
+
+- label: "Forschungsprojekte"
+  value: 12
+  description: "Laufende und abgeschlossene Projekte im Jahr 2024"
+
+- label: "Publikationen"
+  value: 35
+  description: "Veröffentlichungen, Konferenzbeiträge und Berichte"
+
+- label: "Kooperationspartner"
+  value: 42
+  description: "Partner aus Wirtschaft, Gesellschaft und Wissenschaft"
+
+- label: "Drittmittel (Tsd. €)"
+  value: 2800
+  suffix: "k"
+  description: "Eingeworbene Drittmittel im Jahr 2024"
+
+- label: "Studierende begleitet"
+  value: 120
+  description: "Begleitete Bachelor- und Masterarbeiten sowie Praxisprojekte"

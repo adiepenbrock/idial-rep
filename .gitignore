@@ -1,0 +1,15 @@
+# Hugo build output – never commit, built by CI
+public/
+resources/
+
+# Hugo build lock
+.hugo_build.lock
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
