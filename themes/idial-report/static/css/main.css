@@ -2304,6 +2304,7 @@ h6,
 
 .hero-bento-card-summary {
   grid-column: span 4;
+  grid-row: span 2;
   background: linear-gradient(145deg, rgba(52, 34, 23, 0.94) 0%, rgba(38, 27, 20, 0.88) 100%);
   border-color: rgba(255, 174, 112, 0.34);
 }
@@ -2974,6 +2975,10 @@ h6,
   .hero-bento-card-feature,
   .hero-bento-card-summary {
     grid-column: span 4;
+  }
+
+  .hero-bento-card-summary {
+    grid-row: span 1;
   }
 
   .hero-bento-card-wide,
