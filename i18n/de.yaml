@@ -127,6 +127,12 @@
 - id: reportHeroMediaSlideAria
   translation: "Bild {{ .Index }} anzeigen"
 
+- id: reportHeroMediaPrevAria
+  translation: "Vorheriges Bild"
+
+- id: reportHeroMediaNextAria
+  translation: "Naechstes Bild"
+
 - id: discoverReport
   translation: "Bericht entdecken"
 

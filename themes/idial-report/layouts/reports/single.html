@@ -85,9 +85,13 @@
           </figure>
           {{ end }}
           {{ if gt (len $heroImages) 1 }}
-          <div class="hero-media-dots" aria-hidden="true">
+          <div class="hero-media-controls">
+            <button type="button" class="hero-media-control" data-slide-dir="prev" aria-label="{{ i18n "reportHeroMediaPrevAria" }}">&larr;</button>
+            <button type="button" class="hero-media-control" data-slide-dir="next" aria-label="{{ i18n "reportHeroMediaNextAria" }}">&rarr;</button>
+          </div>
+          <div class="hero-media-dots">
             {{ range $imgIndex, $img := $heroImages }}
-            <button type="button" class="hero-media-dot{{ if eq $imgIndex 0 }} active{{ end }}" data-slide-index="{{ $imgIndex }}" aria-label="{{ i18n "reportHeroMediaSlideAria" (dict "Index" (add $imgIndex 1)) }}"></button>
+            <button type="button" class="hero-media-dot{{ if eq $imgIndex 0 }} active{{ end }}" data-slide-index="{{ $imgIndex }}" aria-label="{{ i18n "reportHeroMediaSlideAria" (dict "Index" (add $imgIndex 1)) }}" aria-pressed="{{ if eq $imgIndex 0 }}true{{ else }}false{{ end }}"></button>
             {{ end }}
           </div>
           {{ end }}

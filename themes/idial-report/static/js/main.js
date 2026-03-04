@@ -266,6 +266,7 @@
   randomSliders.forEach(function(slider) {
     const slides = slider.querySelectorAll('.hero-media-slide');
     const dots = slider.querySelectorAll('.hero-media-dot');
+    const controls = slider.querySelectorAll('.hero-media-control');
     if (slides.length === 0) {
       return;
     }
@@ -280,7 +281,13 @@
 
       dots.forEach(function(dot, dotIndex) {
         dot.classList.toggle('active', dotIndex === index);
+        dot.setAttribute('aria-pressed', dotIndex === index ? 'true' : 'false');
       });
+    }
+
+    function goToSlide(nextIndex) {
+      currentIndex = (nextIndex + slides.length) % slides.length;
+      setActiveSlide(currentIndex);
     }
 
     function stopAutoPlay() {
@@ -297,8 +304,7 @@
 
       stopAutoPlay();
       intervalId = window.setInterval(function() {
-        currentIndex = (currentIndex + 1) % slides.length;
-        setActiveSlide(currentIndex);
+        goToSlide(currentIndex + 1);
       }, 5000);
     }
 
@@ -316,8 +322,15 @@
 
     dots.forEach(function(dot, dotIndex) {
       dot.addEventListener('click', function() {
-        currentIndex = dotIndex;
-        setActiveSlide(currentIndex);
+        goToSlide(dotIndex);
+        startAutoPlay();
+      });
+    });
+
+    controls.forEach(function(control) {
+      control.addEventListener('click', function() {
+        const direction = this.dataset.slideDir === 'prev' ? -1 : 1;
+        goToSlide(currentIndex + direction);
         startAutoPlay();
       });
     });
