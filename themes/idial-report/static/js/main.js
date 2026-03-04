@@ -5,6 +5,10 @@
 (function() {
   'use strict';
 
+  const docLang = (document.documentElement.lang || 'de').toLowerCase();
+  const numberLocale = docLang.startsWith('en') ? 'en-US' : 'de-DE';
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   /* ----------------------------------------------------------
      1. Scroll Progress Indicator
      ---------------------------------------------------------- */
@@ -33,6 +37,54 @@
       }
       lastScroll = currentScroll;
     }, { passive: true });
+  }
+
+  /* ----------------------------------------------------------
+     2b. Report Side Nav Visibility + Header Hand-off
+     ---------------------------------------------------------- */
+  const isReportPage = document.body.classList.contains('page-reports');
+  const reportSideNav = document.querySelector('.report-side-nav-left');
+  if (isReportPage && reportSideNav) {
+    const sideNavMedia = window.matchMedia('(min-width: 1321px)');
+    const firstReportSection = document.getElementById('vorwort') || document.getElementById('highlights');
+
+    function updateReportSideNavVisibility() {
+      if (!sideNavMedia.matches) {
+        document.body.classList.remove('report-side-nav-visible');
+        if (header) {
+          header.removeAttribute('inert');
+          header.removeAttribute('aria-hidden');
+        }
+        return;
+      }
+
+      const navHeight = parseInt(getComputedStyle(document.documentElement)
+        .getPropertyValue('--nav-height')) || 72;
+
+      const threshold = firstReportSection
+        ? Math.max(firstReportSection.offsetTop - navHeight - 40, 140)
+        : Math.max(window.innerHeight * 0.45, 140);
+
+      const isSideNavVisible = window.scrollY >= threshold;
+      document.body.classList.toggle('report-side-nav-visible', isSideNavVisible);
+
+      if (header) {
+        if (isSideNavVisible) {
+          header.setAttribute('inert', '');
+          header.setAttribute('aria-hidden', 'true');
+        } else {
+          header.removeAttribute('inert');
+          header.removeAttribute('aria-hidden');
+        }
+      }
+    }
+
+    window.addEventListener('scroll', updateReportSideNavVisibility, { passive: true });
+    window.addEventListener('resize', updateReportSideNavVisibility);
+    if (sideNavMedia.addEventListener) {
+      sideNavMedia.addEventListener('change', updateReportSideNavVisibility);
+    }
+    updateReportSideNavVisibility();
   }
 
   /* ----------------------------------------------------------
@@ -79,7 +131,7 @@
         const navHeight = parseInt(getComputedStyle(document.documentElement)
           .getPropertyValue('--nav-height')) || 72;
         const targetTop = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
-        window.scrollTo({ top: targetTop, behavior: 'smooth' });
+        window.scrollTo({ top: targetTop, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
       }
     });
   });
@@ -87,7 +139,7 @@
   /* ----------------------------------------------------------
      5. Active Section Highlighting in Nav
      ---------------------------------------------------------- */
-  const sectionLinks = document.querySelectorAll('.nav-section-link');
+  const sectionLinks = document.querySelectorAll('.nav-section-link, .report-float-link');
   if (sectionLinks.length > 0) {
     const sections = [];
     sectionLinks.forEach(function(link) {
@@ -159,12 +211,12 @@
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
       const value = Math.round(easeOut(progress) * target);
-      el.textContent = value.toLocaleString('de-DE') + suffix;
+      el.textContent = value.toLocaleString(numberLocale) + suffix;
 
       if (progress < 1) {
         requestAnimationFrame(update);
       } else {
-        el.textContent = target.toLocaleString('de-DE') + suffix;
+        el.textContent = target.toLocaleString(numberLocale) + suffix;
       }
     }
 
@@ -208,59 +260,232 @@
   }
 
   /* ----------------------------------------------------------
-     9. Project Tag Filtering
+     9. Project Tag Filtering + Search
      ---------------------------------------------------------- */
   const filterBtns = document.querySelectorAll('.filter-btn');
   const projectCards = document.querySelectorAll('.project-card');
+  const projectSearchInput = document.getElementById('project-search');
+  const projectResults = document.getElementById('project-results');
+  const projectViewBtns = document.querySelectorAll('.projects-view-btn');
+  const projectsGrid = document.getElementById('projects-grid');
+  const projectResultsWords = docLang.startsWith('en')
+    ? { of: 'of', label: 'projects' }
+    : { of: 'von', label: 'Projekten' };
 
-  if (filterBtns.length > 0 && projectCards.length > 0) {
-    filterBtns.forEach(function(btn) {
+  function normalizeText(value) {
+    return (value || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  if (projectCards.length > 0) {
+    let activeFilter = 'all';
+
+    function updateProjectResults() {
+      const query = normalizeText(projectSearchInput ? projectSearchInput.value : '');
+      let visibleCount = 0;
+
+      projectCards.forEach(function(card) {
+        const tags = (card.dataset.tags || '').trim().split(/\s+/).filter(Boolean);
+        const title = normalizeText(card.dataset.title);
+        const description = normalizeText(card.dataset.description);
+        const category = normalizeText(card.dataset.category);
+        const funding = normalizeText(card.dataset.funding);
+
+        const matchesFilter = activeFilter === 'all' || tags.includes(activeFilter);
+        const matchesSearch = !query
+          || title.includes(query)
+          || description.includes(query)
+          || category.includes(query)
+          || funding.includes(query);
+
+        const isVisible = matchesFilter && matchesSearch;
+        card.classList.toggle('is-hidden', !isVisible);
+        if (isVisible) {
+          visibleCount += 1;
+        }
+      });
+
+      if (projectResults) {
+        projectResults.textContent = visibleCount + ' ' + projectResultsWords.of + ' ' + projectCards.length + ' ' + projectResultsWords.label;
+      }
+    }
+
+    if (filterBtns.length > 0) {
+      filterBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          filterBtns.forEach(function(button) {
+            button.classList.remove('active');
+            button.setAttribute('aria-pressed', 'false');
+          });
+          this.classList.add('active');
+          this.setAttribute('aria-pressed', 'true');
+          activeFilter = this.dataset.filter || 'all';
+          updateProjectResults();
+        });
+      });
+    }
+
+    if (projectSearchInput) {
+      projectSearchInput.addEventListener('input', updateProjectResults);
+    }
+
+    if (projectViewBtns.length > 0 && projectsGrid) {
+      projectViewBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const view = this.dataset.view || 'grid';
+
+          projectViewBtns.forEach(function(button) {
+            button.classList.remove('active');
+            button.setAttribute('aria-pressed', 'false');
+          });
+
+          this.classList.add('active');
+          this.setAttribute('aria-pressed', 'true');
+          projectsGrid.classList.toggle('projects-list-view', view === 'list');
+        });
+      });
+    }
+
+    updateProjectResults();
+  }
+
+  /* ----------------------------------------------------------
+     10. Highlight Category Filtering
+     ---------------------------------------------------------- */
+  const timelineFilterBtns = document.querySelectorAll('.timeline-filter-btn');
+  const timelineItems = document.querySelectorAll('.timeline-item[data-category]');
+
+  if (timelineFilterBtns.length > 0 && timelineItems.length > 0) {
+    timelineFilterBtns.forEach(function(btn) {
       btn.addEventListener('click', function() {
-        filterBtns.forEach(function(b) { b.classList.remove('active'); });
+        const targetCategory = this.dataset.category || 'all';
+
+        timelineFilterBtns.forEach(function(button) {
+          button.classList.remove('active');
+          button.setAttribute('aria-pressed', 'false');
+        });
         this.classList.add('active');
+        this.setAttribute('aria-pressed', 'true');
 
-        const filter = this.dataset.filter;
-
-        projectCards.forEach(function(card) {
-          if (filter === 'all') {
-            card.style.display = '';
-            setTimeout(function() { card.style.opacity = '1'; }, 10);
-          } else {
-            const tags = (card.dataset.tags || '').split(' ');
-            if (tags.includes(filter)) {
-              card.style.display = '';
-              setTimeout(function() { card.style.opacity = '1'; }, 10);
-            } else {
-              card.style.opacity = '0';
-              setTimeout(function() { card.style.display = 'none'; }, 300);
-            }
-          }
+        timelineItems.forEach(function(item) {
+          const itemCategory = item.dataset.category || 'all';
+          const shouldShow = targetCategory === 'all' || itemCategory === targetCategory;
+          item.classList.toggle('is-hidden', !shouldShow);
         });
       });
     });
   }
 
   /* ----------------------------------------------------------
-     10. Keyboard accessibility for year selector
+     11. Keyboard accessibility for year selector
      ---------------------------------------------------------- */
   const yearSelectors = document.querySelectorAll('.year-selector');
   yearSelectors.forEach(function(selector) {
     const current = selector.querySelector('.year-current');
     const dropdown = selector.querySelector('.year-dropdown');
     if (current && dropdown) {
-      current.setAttribute('tabindex', '0');
-      current.setAttribute('role', 'button');
-      current.setAttribute('aria-haspopup', 'listbox');
+      function setSelectorOpen(isOpen) {
+        selector.classList.toggle('open', isOpen);
+        current.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+
+      function toggleSelector() {
+        setSelectorOpen(!selector.classList.contains('open'));
+      }
+
+      current.addEventListener('click', function() {
+        toggleSelector();
+      });
 
       current.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          dropdown.style.opacity === '1'
-            ? (dropdown.style.opacity = '0', dropdown.style.visibility = 'hidden')
-            : (dropdown.style.opacity = '1', dropdown.style.visibility = 'visible');
+          toggleSelector();
+        }
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          setSelectorOpen(true);
+          const firstItem = dropdown.querySelector('a');
+          if (firstItem) {
+            firstItem.focus();
+          }
+        }
+
+        if (e.key === 'Escape') {
+          setSelectorOpen(false);
+        }
+      });
+
+      dropdown.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          setSelectorOpen(false);
+        });
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!selector.contains(e.target)) {
+          setSelectorOpen(false);
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          setSelectorOpen(false);
         }
       });
     }
   });
+
+  /* ----------------------------------------------------------
+     12. Back-to-top Button
+     ---------------------------------------------------------- */
+  const backToTop = document.getElementById('back-to-top');
+  if (backToTop) {
+    function toggleBackToTop() {
+      if (window.scrollY > 500) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    }
+
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+    toggleBackToTop();
+
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    });
+  }
+
+  /* ----------------------------------------------------------
+     13. Hero Pointer Motion
+     ---------------------------------------------------------- */
+  const heroShapes = document.querySelector('.hero-bg-shapes');
+  const prefersCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+
+  if (heroShapes && !prefersReducedMotion && !prefersCoarsePointer) {
+    let pointerX = 0;
+    let pointerY = 0;
+    let rafPending = false;
+
+    function updateHeroMotion() {
+      const x = (pointerX / window.innerWidth - 0.5) * 14;
+      const y = (pointerY / window.innerHeight - 0.5) * 10;
+      heroShapes.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+      rafPending = false;
+    }
+
+    window.addEventListener('pointermove', function(e) {
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      if (!rafPending) {
+        rafPending = true;
+        window.requestAnimationFrame(updateHeroMotion);
+      }
+    }, { passive: true });
+  }
 
 })();

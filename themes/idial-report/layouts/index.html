@@ -1,5 +1,12 @@
 {{ define "main" }}
 {{ $latestYear := .Site.Params.latestReport }}
+{{ $latestDataRoot := index .Site.Data.reports $latestYear }}
+{{ $latestData := $latestDataRoot }}
+{{ with index $latestDataRoot .Site.Language.Lang }}
+  {{ $latestData = . }}
+{{ end }}
+{{ $reports := sort (where .Site.RegularPages "Section" "reports") "Params.year" "desc" }}
+{{ $latestReportURL := printf "/reports/%s/" $latestYear | relLangURL }}
 <section class="home-hero">
   <div class="hero-bg-shapes">
     <div class="shape shape-1"></div>
@@ -8,23 +15,33 @@
     <div class="shape shape-4"></div>
   </div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Interaktiver Jahresbericht</div>
+    <div class="hero-eyebrow">{{ i18n "heroEyebrow" }}</div>
     <h1 class="hero-title">
       <span class="hero-title-institute">IDiAL</span>
       <span class="hero-title-year">{{ $latestYear }}</span>
     </h1>
     <p class="hero-subtitle">{{ .Site.Params.instituteFullName }}</p>
-    <p class="hero-description">Entdecken Sie unsere Forschung, Projekte und Ergebnisse des Jahres {{ $latestYear }} – interaktiv und ansprechend aufbereitet.</p>
+    <p class="hero-description">{{ i18n "homeHeroDescription" (dict "Year" $latestYear) }}</p>
     <div class="hero-actions">
-      <a href="/reports/{{ $latestYear }}/" class="btn btn-primary btn-large">
-        Jahresbericht {{ $latestYear }} entdecken
+      <a href="{{ $latestReportURL }}" class="btn btn-primary btn-large">
+        {{ i18n "discoverAnnualReport" (dict "Year" $latestYear) }}
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </a>
-      <a href="/reports/" class="btn btn-outline">Alle Berichte</a>
+      <a href="{{ "/reports/" | relLangURL }}" class="btn btn-outline">{{ i18n "allReports" }}</a>
     </div>
+    {{ with $latestData.stats }}
+    <div class="hero-impact-grid">
+      {{ range first 3 . }}
+      <div class="hero-impact-card animate-on-scroll">
+        <div class="hero-impact-value">{{ .value }}{{ with .suffix }}{{ . }}{{ end }}</div>
+        <div class="hero-impact-label">{{ .label }}</div>
+      </div>
+      {{ end }}
+    </div>
+    {{ end }}
   </div>
   <div class="hero-scroll-hint">
-    <span>Scrollen</span>
+    <span>{{ i18n "scrollHint" }}</span>
     <div class="scroll-arrow"></div>
   </div>
 </section>
@@ -33,33 +50,33 @@
   <div class="container">
     <div class="about-grid">
       <div class="about-text">
-        <div class="section-label">Das Institut</div>
-        <h2>Digitalisierung gestalten &ndash; <br>Zukunft schaffen</h2>
-        <p>Das IDiAL (Institut für die Digitalisierung von Arbeits- und Lebenswelten) an der Fachhochschule Dortmund entwickelt wissenschaftliche Erkenntnisse und Lösungen, um Chancen zu nutzen und Herausforderungen des gesellschaftlichen und wirtschaftlichen Wandels zu begegnen.</p>
-        <a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener" class="btn btn-ghost">Mehr über IDiAL</a>
+        <div class="section-label">{{ i18n "homeAboutLabel" }}</div>
+        <h2>{{ i18n "homeAboutTitle" | safeHTML }}</h2>
+        <p>{{ i18n "homeAboutDescription" }}</p>
+        <a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener" class="btn btn-ghost">{{ i18n "homeAboutAction" }}</a>
       </div>
       <div class="about-focus">
-        <h3>Forschungsschwerpunkte</h3>
+        <h3>{{ i18n "homeFocusTitle" }}</h3>
         <ul class="focus-list">
           <li class="focus-item">
             <div class="focus-icon">&#x1F916;</div>
             <div>
-              <strong>Autonome Mobile Systeme</strong>
-              <p>Robotik, KI und automatisierte Prozesse</p>
+              <strong>{{ i18n "focusOneTitle" }}</strong>
+              <p>{{ i18n "focusOneDescription" }}</p>
             </div>
           </li>
           <li class="focus-item">
             <div class="focus-icon">&#x1F4BB;</div>
             <div>
-              <strong>Digitale Arbeitswelten</strong>
-              <p>Transformation von Arbeit und Organisation</p>
+              <strong>{{ i18n "focusTwoTitle" }}</strong>
+              <p>{{ i18n "focusTwoDescription" }}</p>
             </div>
           </li>
           <li class="focus-item">
             <div class="focus-icon">&#x1F4A1;</div>
             <div>
-              <strong>User Innovation</strong>
-              <p>Nutzerintegration in Innovationsprozesse</p>
+              <strong>{{ i18n "focusThreeTitle" }}</strong>
+              <p>{{ i18n "focusThreeDescription" }}</p>
             </div>
           </li>
         </ul>
@@ -68,26 +85,62 @@
   </div>
 </section>
 
+<section class="home-report-journey">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">{{ i18n "homeJourneyLabel" }}</div>
+      <h2>{{ i18n "homeJourneyTitle" (dict "Year" $latestYear) }}</h2>
+      <p>{{ i18n "homeJourneyDescription" (dict "Year" $latestYear) }}</p>
+    </div>
+    <div class="journey-grid">
+      <a href="{{ $latestReportURL }}#highlights" class="journey-card animate-on-scroll">
+        <span class="journey-step">01</span>
+        <h3>{{ i18n "sectionHighlights" }}</h3>
+        <p>{{ i18n "journeyHighlightsDescription" }}</p>
+      </a>
+      <a href="{{ $latestReportURL }}#projekte" class="journey-card animate-on-scroll">
+        <span class="journey-step">02</span>
+        <h3>{{ i18n "sectionProjects" }}</h3>
+        <p>{{ i18n "journeyProjectsDescription" }}</p>
+      </a>
+      <a href="{{ $latestReportURL }}#zahlen" class="journey-card animate-on-scroll">
+        <span class="journey-step">03</span>
+        <h3>{{ i18n "sectionFacts" }}</h3>
+        <p>{{ i18n "journeyFactsDescription" }}</p>
+      </a>
+      <a href="{{ $latestReportURL }}#team" class="journey-card animate-on-scroll">
+        <span class="journey-step">04</span>
+        <h3>{{ i18n "journeyTeamTitle" }}</h3>
+        <p>{{ i18n "journeyTeamDescription" }}</p>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="home-reports-preview">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">Jahresberichte</div>
-      <h2>Unsere Berichte</h2>
-      <p>Erfahren Sie mehr über unsere Arbeit und Ergebnisse der vergangenen Jahre.</p>
+      <div class="section-label">{{ i18n "reportsMenuLabel" }}</div>
+      <h2>{{ i18n "homeReportsTitle" }}</h2>
+      <p>{{ i18n "homeReportsDescription" }}</p>
     </div>
     <div class="reports-grid">
-      {{ range .Site.RegularPages }}
-        {{ if eq .Section "reports" }}
-        <article class="report-card report-card-featured">
-          <div class="report-card-year">{{ .Params.year }}</div>
-          <h3 class="report-card-title">{{ .Title }}</h3>
-          <p class="report-card-tagline">{{ .Params.tagline }}</p>
-          <a href="{{ .RelPermalink }}" class="report-card-link">
-            Bericht ansehen
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-        </article>
-        {{ end }}
+      {{ range $reports }}
+      <article class="report-card report-card-featured animate-on-scroll">
+        <div class="report-card-year">{{ .Params.year }}</div>
+        <h3 class="report-card-title">{{ .Title }}</h3>
+        <p class="report-card-tagline">{{ .Params.tagline }}</p>
+        <a href="{{ .RelPermalink }}" class="report-card-link">
+          {{ i18n "viewReport" }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </article>
+      {{ else }}
+      <article class="report-card report-card-featured">
+        <div class="report-card-year">--</div>
+        <h3 class="report-card-title">{{ i18n "noReportsTitle" }}</h3>
+        <p class="report-card-tagline">{{ i18n "noReportsDescription" }}</p>
+      </article>
       {{ end }}
     </div>
   </div>

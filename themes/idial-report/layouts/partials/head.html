@@ -6,14 +6,19 @@
 <!-- Preconnect for fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="{{ "images/favicon.svg" | relURL }}">
 
-{{ if .IsHome }}<link rel="canonical" href="{{ .Site.BaseURL }}">{{ else }}<link rel="canonical" href="{{ .Permalink }}">{{ end }}
+<link rel="canonical" href="{{ .Permalink }}">
+{{ if gt (len .AllTranslations) 1 }}
+  {{ range .AllTranslations }}
+<link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
+  {{ end }}
+{{ end }}
 
 <!-- Open Graph -->
 <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}">

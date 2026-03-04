@@ -1,0 +1,161 @@
+{{ define "main" }}
+{{ $status := .Params.status | default "" | lower }}
+{{ $year := .Params.year | default .Site.Params.latestReport }}
+{{ $reportDataRoot := index .Site.Data.reports $year }}
+{{ $reportData := $reportDataRoot }}
+{{ if $reportDataRoot }}
+  {{ with index $reportDataRoot .Site.Language.Lang }}
+    {{ $reportData = . }}
+  {{ end }}
+{{ end }}
+
+{{ $fallbackFunding := slice }}
+{{ with .Params.funding }}
+  {{ $fallbackFunding = $fallbackFunding | append (dict "name" . "program" "" "amount" "" "url" "" "logo" "") }}
+{{ end }}
+{{ $projectFunding := .Params.funding_sources | default $fallbackFunding }}
+
+{{ $fallbackTeam := slice }}
+{{ with $reportData.team }}
+  {{ $fallbackTeam = first 4 . }}
+{{ end }}
+{{ $projectTeam := .Params.team_members | default $fallbackTeam }}
+
+{{ $fallbackPartners := slice }}
+{{ with $reportData.partners }}
+  {{ range . }}
+    {{ $category := .category }}
+    {{ range .items }}
+      {{ if lt (len $fallbackPartners) 8 }}
+        {{ $fallbackPartners = $fallbackPartners | append (dict "name" .name "logo" .logo "url" .url "category" $category) }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ $projectPartners := .Params.partners | default $fallbackPartners }}
+
+<section class="project-page-hero">
+  <div class="container">
+    <div class="section-label">{{ i18n "projectDetailLabel" }}</div>
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.summary }}<p class="project-page-summary">{{ . }}</p>{{ end }}
+    <div class="project-actions">
+      <a href="{{ printf "/reports/%s/#projekte" $year | relLangURL }}" class="btn btn-outline">{{ i18n "projectBackToReport" (dict "Year" $year) }}</a>
+      {{ with .Params.external_url }}<a href="{{ . }}" target="_blank" rel="noopener" class="btn btn-primary">{{ i18n "projectWebsite" }}</a>{{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="project-page-content-wrap report-section">
+  <div class="container">
+    <div class="project-page-grid">
+      <article class="project-page-content content-body">
+        {{ with .Params.cover_image }}
+        <div class="project-cover-wrap">
+          <img src="{{ . }}" alt="{{ $.Title }}" class="project-cover-image">
+        </div>
+        {{ end }}
+        {{ .Content }}
+      </article>
+      <aside class="project-page-aside">
+        <div class="project-page-aside-card">
+          {{ with .Params.category }}<div class="project-category">{{ . }}</div>{{ end }}
+          {{ with .Params.status }}
+          <div class="project-status project-status-{{ . | lower | urlize }}">
+            {{ if or (eq $status "laufend") (eq $status "ongoing") }}{{ i18n "statusOngoing" }}{{ else if or (eq $status "abgeschlossen") (eq $status "completed") }}{{ i18n "statusCompleted" }}{{ else }}{{ . }}{{ end }}
+          </div>
+          {{ end }}
+          <div class="project-meta project-meta-vertical">
+            {{ with .Params.funding }}<div class="project-meta-item"><span class="meta-label">{{ i18n "projectFunding" }}</span><span class="meta-value">{{ . }}</span></div>{{ end }}
+            {{ with .Params.duration }}<div class="project-meta-item"><span class="meta-label">{{ i18n "projectDuration" }}</span><span class="meta-value">{{ . }}</span></div>{{ end }}
+            <div class="project-meta-item"><span class="meta-label">{{ i18n "reportsMenuLabel" }}</span><span class="meta-value">{{ $year }}</span></div>
+          </div>
+          {{ with .Params.tags }}
+          <div class="project-tags">
+            {{ range . }}<span class="tag">{{ . }}</span>{{ end }}
+          </div>
+          {{ end }}
+
+          {{ if gt (len $projectFunding) 0 }}
+          <div class="project-side-subsection">
+            <h3>{{ i18n "projectFundingDetailsTitle" }}</h3>
+            <div class="project-side-funding-list">
+              {{ range $projectFunding }}
+              {{ $funder := . }}
+              <div class="project-side-funding-item">
+                {{ with $funder.logo }}
+                <img src="{{ . }}" alt="{{ $funder.name }}" class="project-funding-logo project-funding-logo-small">
+                {{ end }}
+                <span>{{ $funder.name }}</span>
+              </div>
+              {{ end }}
+            </div>
+          </div>
+          {{ end }}
+        </div>
+      </aside>
+    </div>
+
+    <div class="project-detail-sections">
+      {{ if gt (len $projectTeam) 0 }}
+      <section class="project-detail-block">
+        <div class="project-detail-header">
+          <h2>{{ i18n "projectTeamTitle" }}</h2>
+          <p>{{ i18n "projectTeamDescription" }}</p>
+        </div>
+        <div class="project-team-grid-inline">
+          {{ range $projectTeam }}
+          {{ $member := . }}
+          <article class="project-team-card-inline">
+            {{ with $member.image }}
+            <img src="{{ . }}" alt="{{ $member.name }}" class="project-team-avatar">
+            {{ else }}
+            <div class="project-team-avatar project-team-avatar-fallback">{{ substr ($member.name | upper) 0 2 }}</div>
+            {{ end }}
+            <div>
+              <h3 class="project-team-name">{{ $member.name }}</h3>
+              {{ with $member.role }}<p class="project-team-role">{{ . }}</p>{{ end }}
+              {{ with $member.area }}<p class="project-team-area">{{ . }}</p>{{ end }}
+              {{ with $member.email }}<a href="mailto:{{ . }}" class="project-team-contact">{{ . }}</a>{{ end }}
+            </div>
+          </article>
+          {{ end }}
+        </div>
+      </section>
+      {{ end }}
+
+      {{ if gt (len $projectPartners) 0 }}
+      <section class="project-detail-block">
+        <div class="project-detail-header">
+          <h2>{{ i18n "projectPartnersTitle" }}</h2>
+          <p>{{ i18n "projectPartnersDescription" }}</p>
+        </div>
+        <div class="project-partners-grid">
+          {{ range $projectPartners }}
+          <article class="project-partner-card">
+            {{ if .logo }}
+            {{ if .url }}
+            <a href="{{ .url }}" target="_blank" rel="noopener" class="project-partner-logo-link" title="{{ .name }}">
+              <img src="{{ .logo }}" alt="{{ .name }}" class="project-partner-logo">
+            </a>
+            {{ else }}
+            <div class="project-partner-logo-link" title="{{ .name }}">
+              <img src="{{ .logo }}" alt="{{ .name }}" class="project-partner-logo">
+            </div>
+            {{ end }}
+            {{ else }}
+            <div class="project-partner-logo-fallback">{{ substr (.name | upper) 0 2 }}</div>
+            {{ end }}
+            <div class="project-partner-info">
+              <h3 class="project-partner-name">{{ .name }}</h3>
+              {{ with .category }}<p class="project-partner-category">{{ . }}</p>{{ end }}
+            </div>
+          </article>
+          {{ end }}
+        </div>
+      </section>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

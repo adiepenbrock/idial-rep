@@ -4,26 +4,58 @@
 baseURL = 'https://jahresbericht.idial.institute/'
 languageCode = 'de'
 defaultContentLanguage = 'de'
+defaultContentLanguageInSubdir = false
 title = 'IDiAL Jahresbericht'
 theme = 'idial-report'
 
 [params]
-  description = "Interaktiver Jahresbericht des Instituts für die Digitalisierung von Arbeits- und Lebenswelten (IDiAL) an der FH Dortmund"
   latestReport = "2024"
   instituteFullName = "Institut für die Digitalisierung von Arbeits- und Lebenswelten"
   instituteShortName = "IDiAL"
   university = "Fachhochschule Dortmund"
   universityURL = "https://www.fh-dortmund.de"
+  description = "Interaktiver Jahresbericht des Instituts für die Digitalisierung von Arbeits- und Lebenswelten (IDiAL) an der FH Dortmund"
 
-[[menus.main]]
-  name = "Jahresberichte"
-  url = "/reports/"
-  weight = 10
+[languages]
+  [languages.de]
+    languageName = "Deutsch"
+    languageCode = "de-DE"
+    weight = 1
+    title = "IDiAL Jahresbericht"
 
-[[menus.main]]
-  name = "2024"
-  url = "/reports/2024/"
-  weight = 20
+    [languages.de.params]
+      description = "Interaktiver Jahresbericht des Instituts für die Digitalisierung von Arbeits- und Lebenswelten (IDiAL) an der FH Dortmund"
+
+    [[languages.de.menus.main]]
+      name = "Jahresberichte"
+      url = "/reports/"
+      weight = 10
+
+    [[languages.de.menus.main]]
+      name = "2024"
+      url = "/reports/2024/"
+      weight = 20
+
+  [languages.en]
+    languageName = "English"
+    languageCode = "en-US"
+    weight = 2
+    title = "IDiAL Annual Report"
+
+    [languages.en.params]
+      description = "Interactive annual report by the Institute for the Digitalization of Work and Living Environments (IDiAL) at Dortmund University of Applied Sciences and Arts"
+      instituteFullName = "Institute for the Digitalization of Work and Living Environments"
+      university = "Dortmund University of Applied Sciences and Arts"
+
+    [[languages.en.menus.main]]
+      name = "Reports"
+      url = "/reports/"
+      weight = 10
+
+    [[languages.en.menus.main]]
+      name = "2024"
+      url = "/reports/2024/"
+      weight = 20
 
 [markup.goldmark.renderer]
   unsafe = true

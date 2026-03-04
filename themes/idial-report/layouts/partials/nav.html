@@ -1,44 +1,39 @@
 <header class="site-header" id="site-header">
   <nav class="nav-container">
-    <a href="/" class="nav-logo" aria-label="IDiAL Jahresbericht Startseite">
+    <a href="{{ "/" | relLangURL }}" class="nav-logo" aria-label="{{ i18n "navHomeAria" }}">
       <span class="logo-accent">IDiAL</span>
-      <span class="logo-text">Jahresbericht</span>
+      <span class="logo-text">{{ i18n "brandReport" }}</span>
     </a>
 
-    <button class="nav-toggle" id="nav-toggle" aria-label="Navigation öffnen" aria-expanded="false">
+    <button class="nav-toggle" id="nav-toggle" aria-label="{{ i18n "navOpen" }}" aria-expanded="false">
       <span></span>
       <span></span>
       <span></span>
     </button>
 
     <div class="nav-menu" id="nav-menu">
-      {{ if .Params.year }}
-      <!-- In-page section navigation (only on report pages) -->
-      <ul class="nav-sections" id="nav-sections">
-        <li><a href="#vorwort" class="nav-section-link">Vorwort</a></li>
-        <li><a href="#highlights" class="nav-section-link">Highlights</a></li>
-        <li><a href="#projekte" class="nav-section-link">Projekte</a></li>
-        <li><a href="#zahlen" class="nav-section-link">Zahlen</a></li>
-        <li><a href="#team" class="nav-section-link">Team</a></li>
-        <li><a href="#partner" class="nav-section-link">Partner</a></li>
-      </ul>
-      <div class="nav-divider"></div>
-      {{ end }}
-
       <ul class="nav-links">
         <li>
           <div class="year-selector">
-            <span class="year-current">{{ if .Params.year }}{{ .Params.year }}{{ else }}Berichte{{ end }}</span>
-            <ul class="year-dropdown">
+            <button type="button" class="year-current" aria-expanded="false" aria-controls="year-dropdown" aria-label="{{ i18n "yearSelectorAria" }}">{{ if .Params.year }}{{ .Params.year }}{{ else }}{{ i18n "reportsMenuLabel" }}{{ end }}</button>
+            <ul class="year-dropdown" id="year-dropdown">
               {{ range .Site.Menus.main }}
-                {{ if ne .Name "Jahresberichte" }}
-                <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+                {{ if ne .URL "/reports/" }}
+                <li><a href="{{ .URL | relLangURL }}">{{ .Name }}</a></li>
                 {{ end }}
               {{ end }}
             </ul>
           </div>
         </li>
-        <li><a href="/reports/" class="nav-link nav-link-archive">Alle Berichte</a></li>
+        <li><a href="{{ "/projects/" | relLangURL }}" class="nav-link">{{ i18n "projectsNav" }}</a></li>
+        <li><a href="{{ "/reports/" | relLangURL }}" class="nav-link nav-link-archive">{{ i18n "allReports" }}</a></li>
+        {{ if gt (len .AllTranslations) 1 }}
+        <li class="language-switcher" aria-label="{{ i18n "languageSwitcher" }}">
+          {{ range .AllTranslations }}
+          <a href="{{ .RelPermalink }}" class="language-pill{{ if eq $.Site.Language.Lang .Lang }} active{{ end }}" lang="{{ .Lang }}">{{ upper .Lang }}</a>
+          {{ end }}
+        </li>
+        {{ end }}
         <li>
           <a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener" class="nav-link nav-link-external">
             idial.institute

@@ -1,6 +1,16 @@
 {{ define "main" }}
 {{ $year := .Params.year }}
-{{ $data := index .Site.Data.reports $year }}
+{{ $dataRoot := index .Site.Data.reports $year }}
+{{ $data := $dataRoot }}
+{{ with index $dataRoot .Site.Language.Lang }}
+  {{ $data = . }}
+{{ end }}
+{{ $hasHighlights := and $data $data.highlights }}
+{{ $hasProjects := and $data $data.projects }}
+{{ $hasStats := and $data $data.stats }}
+{{ $hasTeam := and $data $data.team }}
+{{ $hasPartners := and $data $data.partners }}
+{{ $reportPdfURL := .Params.pdf_url }}
 
 <!-- Report Hero -->
 <section class="report-hero" id="hero">
@@ -10,13 +20,18 @@
     <div class="shape shape-3"></div>
   </div>
   <div class="report-hero-content">
-    <div class="hero-eyebrow">IDiAL Jahresbericht</div>
+    <div class="hero-eyebrow">{{ i18n "reportHeroEyebrow" }}</div>
     <div class="hero-year-badge">{{ $year }}</div>
     <h1 class="report-hero-title">{{ .Params.tagline }}</h1>
     <p class="report-hero-subtitle">{{ .Site.Params.instituteFullName }}<br>{{ .Site.Params.university }}</p>
+    {{ with $reportPdfURL }}
+    <div class="report-hero-download">
+      <a href="{{ . }}" class="btn btn-outline-light" target="_blank" rel="noopener">{{ i18n "downloadPdf" }}</a>
+    </div>
+    {{ end }}
     <div class="hero-scroll-cta">
       <a href="#vorwort" class="hero-scroll-link">
-        <span>Bericht entdecken</span>
+        <span>{{ i18n "discoverReport" }}</span>
         <div class="scroll-indicator">
           <div class="scroll-indicator-dot"></div>
         </div>
@@ -36,7 +51,7 @@
 </section>
 
 <!-- Quick Stats Bar -->
-{{ if $data }}
+{{ if $hasStats }}
 <div class="stats-bar">
   <div class="container">
     <div class="stats-bar-inner">
@@ -50,6 +65,24 @@
   </div>
 </div>
 {{ end }}
+
+<nav class="report-side-nav report-side-nav-left" aria-label="{{ i18n "reportNavLabel" }}">
+  <a href="#vorwort" class="report-float-link">{{ i18n "sectionForeword" }}</a>
+  {{ if $hasHighlights }}<a href="#highlights" class="report-float-link">{{ i18n "sectionHighlights" }}</a>{{ end }}
+  {{ if $hasProjects }}<a href="#projekte" class="report-float-link">{{ i18n "sectionProjects" }}</a>{{ end }}
+  {{ if $hasStats }}<a href="#zahlen" class="report-float-link">{{ i18n "sectionFacts" }}</a>{{ end }}
+  {{ if $hasTeam }}<a href="#team" class="report-float-link">{{ i18n "sectionTeam" }}</a>{{ end }}
+  {{ if $hasPartners }}<a href="#partner" class="report-float-link">{{ i18n "sectionPartners" }}</a>{{ end }}
+  <a href="#kontakt" class="report-float-link">{{ i18n "sectionContact" }}</a>
+</nav>
+
+<nav class="report-side-nav report-side-nav-right" aria-label="{{ i18n "reportActionsLabel" }}">
+  {{ with $reportPdfURL }}
+  <a href="{{ . }}" class="report-float-action" target="_blank" rel="noopener">{{ i18n "downloadPdf" }}</a>
+  {{ end }}
+  {{ if $hasProjects }}<a href="#projekte" class="report-float-action">{{ i18n "jumpToProjects" }}</a>{{ end }}
+  <a href="#hero" class="report-float-action">{{ i18n "toTop" }}</a>
+</nav>
 
 <!-- Foreword / Vorwort -->
 <section class="report-section section-vorwort" id="vorwort">
@@ -65,14 +98,14 @@
           </div>
           {{ end }}
           <div class="vorwort-author-card">
-            <strong>{{ .Params.foreword_author | default "Institutsleitung" }}</strong>
-            <span>{{ .Params.foreword_title | default "Institut für die Digitalisierung von Arbeits- und Lebenswelten" }}</span>
+            <strong>{{ .Params.foreword_author | default (i18n "instituteLeadership") }}</strong>
+            <span>{{ .Params.foreword_title | default .Site.Params.instituteFullName }}</span>
           </div>
         </div>
       </div>
       <div class="vorwort-text-col">
-        <div class="section-label">Vorwort</div>
-        <h2>{{ .Params.vorwort_title | default (printf "Sehr geehrte Damen und Herren,") }}</h2>
+        <div class="section-label">{{ i18n "sectionForeword" }}</div>
+        <h2>{{ .Params.vorwort_title | default (i18n "forewordGreeting") }}</h2>
         <div class="vorwort-text">
           {{ .Params.foreword | markdownify }}
         </div>
@@ -82,18 +115,31 @@
 </section>
 
 <!-- Highlights -->
-{{ if $data }}
-{{ if $data.highlights }}
+{{ if $hasHighlights }}
 <section class="report-section section-highlights section-dark" id="highlights">
   <div class="container">
     <div class="section-header section-header-light">
-      <div class="section-label">{{ $year }} im Rückblick</div>
-      <h2>Highlights des Jahres</h2>
-      <p>Die wichtigsten Meilensteine und Ereignisse des Jahres {{ $year }} auf einen Blick.</p>
+      <div class="section-label">{{ i18n "yearInReview" (dict "Year" $year) }}</div>
+      <h2>{{ i18n "highlightsTitle" }}</h2>
+      <p>{{ i18n "highlightsDescription" (dict "Year" $year) }}</p>
+    </div>
+    {{ $highlightCategories := slice }}
+    {{ range $data.highlights }}
+      {{ with .category }}
+        {{ if not (in $highlightCategories .) }}
+          {{ $highlightCategories = $highlightCategories | append . }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    <div class="timeline-filter" id="timeline-filter">
+      <button type="button" class="timeline-filter-btn active" data-category="all" aria-pressed="true">{{ i18n "filterAll" }}</button>
+      {{ range $highlightCategories }}
+      <button type="button" class="timeline-filter-btn" data-category="{{ . | urlize }}" aria-pressed="false">{{ . }}</button>
+      {{ end }}
     </div>
     <div class="timeline">
       {{ range $index, $item := $data.highlights }}
-      <div class="timeline-item {{ if eq (mod $index 2) 0 }}timeline-item-right{{ else }}timeline-item-left{{ end }} animate-on-scroll">
+      <div class="timeline-item {{ if eq (mod $index 2) 0 }}timeline-item-right{{ else }}timeline-item-left{{ end }} animate-on-scroll" data-category="{{ with $item.category }}{{ . | urlize }}{{ else }}all{{ end }}">
         <div class="timeline-marker">
           <div class="timeline-dot"></div>
           <div class="timeline-date">{{ $item.date }}</div>
@@ -103,7 +149,7 @@
           <h3 class="timeline-title">{{ $item.title }}</h3>
           <p class="timeline-text">{{ $item.description }}</p>
           {{ with $item.link }}
-          <a href="{{ . }}" class="timeline-link" target="_blank" rel="noopener">Mehr erfahren &rarr;</a>
+          <a href="{{ . }}" class="timeline-link" target="_blank" rel="noopener">{{ i18n "learnMore" }} &rarr;</a>
           {{ end }}
         </div>
       </div>
@@ -112,56 +158,105 @@
   </div>
 </section>
 {{ end }}
-{{ end }}
 
 <!-- Projects / Forschungsprojekte -->
-{{ if $data }}
-{{ if $data.projects }}
+{{ if $hasProjects }}
 <section class="report-section section-projekte" id="projekte">
   <div class="container">
-    <div class="section-header">
-      <div class="section-label">Forschung</div>
-      <h2>Projekte {{ $year }}</h2>
-      <p>Unsere laufenden und abgeschlossenen Forschungsprojekte – von der Grundlagenforschung bis zur anwendungsnahen Entwicklung.</p>
-    </div>
-    <div class="projects-filter" id="projects-filter">
-      <button class="filter-btn active" data-filter="all">Alle</button>
-      {{ $tags := slice }}
-      {{ range $data.projects }}
-        {{ range .tags }}
-          {{ if not (in $tags .) }}
-            {{ $tags = $tags | append . }}
-          {{ end }}
+    {{ $tags := slice }}
+    {{ $ongoingCount := 0 }}
+    {{ $completedCount := 0 }}
+    {{ range $data.projects }}
+      {{ $status := .status | lower }}
+      {{ if or (eq $status "laufend") (eq $status "ongoing") }}
+        {{ $ongoingCount = add $ongoingCount 1 }}
+      {{ end }}
+      {{ if or (eq $status "abgeschlossen") (eq $status "completed") }}
+        {{ $completedCount = add $completedCount 1 }}
+      {{ end }}
+      {{ range .tags }}
+        {{ if not (in $tags .) }}
+          {{ $tags = $tags | append . }}
         {{ end }}
       {{ end }}
-      {{ range $tags }}
-      <button class="filter-btn" data-filter="{{ . | lower | replaceRE " " "-" }}">{{ . }}</button>
-      {{ end }}
+    {{ end }}
+    <div class="section-header">
+      <div class="section-label">{{ i18n "researchLabel" }}</div>
+      <h2>{{ i18n "projectsTitle" (dict "Year" $year) }}</h2>
+      <p>{{ i18n "projectsDescription" }}</p>
+    </div>
+
+    <div class="project-insight-grid">
+      <div class="project-insight-card">
+        <span class="project-insight-value">{{ len $data.projects }}</span>
+        <span class="project-insight-label">{{ i18n "projectsTotal" }}</span>
+      </div>
+      <div class="project-insight-card">
+        <span class="project-insight-value">{{ $ongoingCount }}</span>
+        <span class="project-insight-label">{{ i18n "projectsOngoing" }}</span>
+      </div>
+      <div class="project-insight-card">
+        <span class="project-insight-value">{{ $completedCount }}</span>
+        <span class="project-insight-label">{{ i18n "projectsCompleted" }}</span>
+      </div>
+      <div class="project-insight-card">
+        <span class="project-insight-value">{{ len $tags }}</span>
+        <span class="project-insight-label">{{ i18n "projectsTopics" }}</span>
+      </div>
+    </div>
+
+    <div class="projects-toolbar">
+      <div class="projects-filter" id="projects-filter">
+        <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true">{{ i18n "filterAll" }}</button>
+        {{ range $tags }}
+        <button type="button" class="filter-btn" data-filter="{{ . | urlize }}" aria-pressed="false">{{ . }}</button>
+        {{ end }}
+      </div>
+      <div class="projects-view-toggle" id="projects-view-toggle">
+        <button type="button" class="projects-view-btn active" data-view="grid" aria-pressed="true">{{ i18n "projectsViewGrid" }}</button>
+        <button type="button" class="projects-view-btn" data-view="list" aria-pressed="false">{{ i18n "projectsViewList" }}</button>
+      </div>
+      <div class="projects-search">
+        <label for="project-search" class="sr-only">{{ i18n "projectSearchLabel" }}</label>
+        <input id="project-search" class="project-search-input" type="search" placeholder="{{ i18n "projectSearchPlaceholder" }}" autocomplete="off">
+        <div class="project-results" id="project-results" aria-live="polite"></div>
+      </div>
     </div>
     <div class="projects-grid" id="projects-grid">
       {{ range $data.projects }}
-      <article class="project-card animate-on-scroll" data-tags="{{ range .tags }}{{ . | lower | replaceRE " " "-" }} {{ end }}">
+      <article class="project-card animate-on-scroll" data-tags="{{ range .tags }}{{ . | urlize }} {{ end }}" data-title="{{ with .title }}{{ . }}{{ end }}" data-description="{{ with .description }}{{ . }}{{ end }}" data-category="{{ with .category }}{{ . }}{{ end }}" data-funding="{{ with .funding }}{{ . }}{{ end }}">
         <div class="project-card-header">
           {{ with .category }}<div class="project-category">{{ . }}</div>{{ end }}
           {{ with .status }}
-          <div class="project-status project-status-{{ . | lower }}">
-            {{ if eq . "laufend" }}Laufend{{ else if eq . "abgeschlossen" }}Abgeschlossen{{ else }}{{ . }}{{ end }}
+          {{ $status := . | lower }}
+          <div class="project-status project-status-{{ $status | urlize }}">
+            {{ if or (eq $status "laufend") (eq $status "ongoing") }}{{ i18n "statusOngoing" }}{{ else if or (eq $status "abgeschlossen") (eq $status "completed") }}{{ i18n "statusCompleted" }}{{ else }}{{ . }}{{ end }}
           </div>
           {{ end }}
         </div>
         <h3 class="project-title">{{ .title }}</h3>
         <p class="project-description">{{ .description }}</p>
+        {{ with .impact }}
+        <p class="project-impact">{{ . }}</p>
+        {{ end }}
         <div class="project-meta">
-          {{ with .funding }}<div class="project-meta-item"><span class="meta-label">Förderung</span><span class="meta-value">{{ . }}</span></div>{{ end }}
-          {{ with .duration }}<div class="project-meta-item"><span class="meta-label">Laufzeit</span><span class="meta-value">{{ . }}</span></div>{{ end }}
+          {{ with .funding }}<div class="project-meta-item"><span class="meta-label">{{ i18n "projectFunding" }}</span><span class="meta-value">{{ . }}</span></div>{{ end }}
+          {{ with .duration }}<div class="project-meta-item"><span class="meta-label">{{ i18n "projectDuration" }}</span><span class="meta-value">{{ . }}</span></div>{{ end }}
         </div>
         {{ with .tags }}
         <div class="project-tags">
           {{ range . }}<span class="tag">{{ . }}</span>{{ end }}
         </div>
         {{ end }}
-        {{ with .url }}
-        <a href="{{ . }}" class="project-link" target="_blank" rel="noopener">Projektseite &rarr;</a>
+        {{ if or .slug .url }}
+        <div class="project-actions">
+          {{ with .slug }}
+          <a href="{{ printf "/projects/%s/" . | relLangURL }}" class="project-link">{{ i18n "projectDetails" }} &rarr;</a>
+          {{ end }}
+          {{ with .url }}
+          <a href="{{ . }}" class="project-link project-link-secondary" target="_blank" rel="noopener">{{ i18n "projectWebsite" }} &rarr;</a>
+          {{ end }}
+        </div>
         {{ end }}
       </article>
       {{ end }}
@@ -169,24 +264,22 @@
   </div>
 </section>
 {{ end }}
-{{ end }}
 
 <!-- Zahlen & Fakten -->
-{{ if $data }}
-{{ if $data.stats }}
+{{ if $hasStats }}
 <section class="report-section section-zahlen section-accent" id="zahlen">
   <div class="container">
     <div class="section-header section-header-light">
-      <div class="section-label">Überblick</div>
-      <h2>Zahlen &amp; Fakten {{ $year }}</h2>
-      <p>Unser Institut in Zahlen &ndash; eine Übersicht der wichtigsten Kennzahlen des Jahres {{ $year }}.</p>
+      <div class="section-label">{{ i18n "overviewLabel" }}</div>
+      <h2>{{ i18n "factsTitle" (dict "Year" $year) }}</h2>
+      <p>{{ i18n "factsDescription" (dict "Year" $year) }}</p>
     </div>
     <div class="stats-grid">
       {{ range $data.stats }}
       <div class="stat-card animate-on-scroll">
         <div class="stat-icon">
           {{ if .icon }}
-          <img src="/images/icons/{{ .icon }}.svg" alt="" aria-hidden="true" width="40" height="40">
+          <img src="{{ printf "images/icons/%s.svg" .icon | relURL }}" alt="" aria-hidden="true" width="40" height="40">
           {{ else }}
           <div class="stat-icon-placeholder"></div>
           {{ end }}
@@ -213,17 +306,15 @@
   </div>
 </section>
 {{ end }}
-{{ end }}
 
 <!-- Team -->
-{{ if $data }}
-{{ if $data.team }}
+{{ if $hasTeam }}
 <section class="report-section section-team" id="team">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">Menschen</div>
-      <h2>Unser Team</h2>
-      <p>Die Menschen hinter IDiAL &ndash; Wissenschaftlerinnen und Wissenschaftler, die täglich an der Digitalisierung von morgen arbeiten.</p>
+      <div class="section-label">{{ i18n "peopleLabel" }}</div>
+      <h2>{{ i18n "teamTitle" }}</h2>
+      <p>{{ i18n "teamDescription" }}</p>
     </div>
     <div class="team-grid">
       {{ range $data.team }}
@@ -247,17 +338,15 @@
   </div>
 </section>
 {{ end }}
-{{ end }}
 
 <!-- Partner -->
-{{ if $data }}
-{{ if $data.partners }}
+{{ if $hasPartners }}
 <section class="report-section section-partner section-light" id="partner">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">Netzwerk</div>
-      <h2>Kooperationen &amp; Partner</h2>
-      <p>IDiAL arbeitet mit Unternehmen, Institutionen und Organisationen aus Wirtschaft, Gesellschaft und Wissenschaft zusammen.</p>
+      <div class="section-label">{{ i18n "networkLabel" }}</div>
+      <h2>{{ i18n "partnersTitle" }}</h2>
+      <p>{{ i18n "partnersDescription" }}</p>
     </div>
     <div class="partner-categories">
       {{ range $data.partners }}
@@ -267,9 +356,15 @@
           {{ range .items }}
           <div class="partner-item animate-on-scroll">
             {{ if .logo }}
-            <a href="{{ with .url }}{{ . }}{{ else }}#{{ end }}" {{ with .url }}target="_blank" rel="noopener"{{ end }} title="{{ .name }}">
+            {{ if .url }}
+            <a href="{{ .url }}" target="_blank" rel="noopener" title="{{ .name }}">
               <img src="{{ .logo }}" alt="{{ .name }}" class="partner-logo">
             </a>
+            {{ else }}
+            <div class="partner-logo-static" title="{{ .name }}">
+              <img src="{{ .logo }}" alt="{{ .name }}" class="partner-logo">
+            </div>
+            {{ end }}
             {{ else }}
             <div class="partner-name-only">{{ .name }}</div>
             {{ end }}
@@ -282,7 +377,6 @@
   </div>
 </section>
 {{ end }}
-{{ end }}
 
 <!-- Content from markdown body -->
 {{ if .Content }}
@@ -294,15 +388,15 @@
 {{ end }}
 
 <!-- CTA / Contact -->
-<section class="report-section section-cta section-dark">
+<section class="report-section section-cta section-dark" id="kontakt">
   <div class="container">
     <div class="cta-content">
-      <div class="section-label">Kontakt</div>
-      <h2>Interesse an einer Zusammenarbeit?</h2>
-      <p>Wir freuen uns über Kooperationsanfragen, Projektideen und den Austausch mit Wirtschaft, Politik und Gesellschaft.</p>
+      <div class="section-label">{{ i18n "sectionContact" }}</div>
+      <h2>{{ i18n "contactTitle" }}</h2>
+      <p>{{ i18n "contactDescription" }}</p>
       <div class="cta-actions">
-        <a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener" class="btn btn-primary btn-large">IDiAL kontaktieren</a>
-        <a href="/reports/" class="btn btn-outline-light">Weitere Berichte</a>
+        <a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener" class="btn btn-primary btn-large">{{ i18n "contactInstitute" }}</a>
+        <a href="{{ "/reports/" | relLangURL }}" class="btn btn-outline-light">{{ i18n "otherReports" }}</a>
       </div>
     </div>
   </div>

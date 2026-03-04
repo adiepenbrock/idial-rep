@@ -1,0 +1,24 @@
+- label: "Staff members"
+  value: 58
+  description: "Scientific and technical staff members at the institute"
+
+- label: "Research projects"
+  value: 12
+  description: "Ongoing and completed projects in 2024"
+
+- label: "Publications"
+  value: 35
+  description: "Publications, conference contributions, and reports"
+
+- label: "Collaboration partners"
+  value: 42
+  description: "Partners from industry, society, and academia"
+
+- label: "Third-party funding (kEUR)"
+  value: 2800
+  suffix: "k"
+  description: "Third-party funding acquired in 2024"
+
+- label: "Students supervised"
+  value: 120
+  description: "Supervised bachelor's and master's theses plus practical projects"

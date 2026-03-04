@@ -1,0 +1,44 @@
+{{ define "main" }}
+<section class="page-hero page-hero-projects">
+  <div class="container">
+    <div class="section-label">{{ i18n "projectsNav" }}</div>
+    <h1>{{ .Title }}</h1>
+    {{ with .Description }}<p>{{ . }}</p>{{ end }}
+  </div>
+</section>
+
+<section class="projects-library">
+  <div class="container">
+    <div class="projects-grid">
+      {{ range .Pages.ByTitle }}
+      <article class="project-card project-library-card animate-on-scroll">
+        <div class="project-card-header">
+          {{ with .Params.category }}<div class="project-category">{{ . }}</div>{{ end }}
+          {{ with .Params.status }}
+          {{ $status := . | lower }}
+          <div class="project-status project-status-{{ $status | urlize }}">
+            {{ if or (eq $status "laufend") (eq $status "ongoing") }}{{ i18n "statusOngoing" }}{{ else if or (eq $status "abgeschlossen") (eq $status "completed") }}{{ i18n "statusCompleted" }}{{ else }}{{ . }}{{ end }}
+          </div>
+          {{ end }}
+        </div>
+        <h2 class="project-title">{{ .Title }}</h2>
+        {{ with .Params.summary }}<p class="project-description">{{ . }}</p>{{ end }}
+        <div class="project-meta">
+          {{ with .Params.funding }}<div class="project-meta-item"><span class="meta-label">{{ i18n "projectFunding" }}</span><span class="meta-value">{{ . }}</span></div>{{ end }}
+          {{ with .Params.duration }}<div class="project-meta-item"><span class="meta-label">{{ i18n "projectDuration" }}</span><span class="meta-value">{{ . }}</span></div>{{ end }}
+        </div>
+        {{ with .Params.tags }}
+        <div class="project-tags">
+          {{ range . }}<span class="tag">{{ . }}</span>{{ end }}
+        </div>
+        {{ end }}
+        <div class="project-actions">
+          <a href="{{ .RelPermalink }}" class="project-link">{{ i18n "projectDetails" }} &rarr;</a>
+          {{ with .Params.external_url }}<a href="{{ . }}" class="project-link project-link-secondary" target="_blank" rel="noopener">{{ i18n "projectWebsite" }} &rarr;</a>{{ end }}
+        </div>
+      </article>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

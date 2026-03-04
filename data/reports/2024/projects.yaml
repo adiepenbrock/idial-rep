@@ -2,54 +2,66 @@
 # Bitte mit tatsächlichen Projekten aus dem Jahresbericht befüllen
 
 - title: "KI-Assistenz in der betrieblichen Praxis (KIAP)"
+  slug: "kiap"
   category: "Digitale Arbeit"
   status: "laufend"
   description: "Untersuchung der Einführung und Nutzung KI-gestützter Assistenzsysteme in kleinen und mittleren Unternehmen. Fokus auf Akzeptanz, Kompetenzentwicklung und betrieblicher Integration."
+  impact: "Entwickelt umsetzbare Fahrplaene fuer die Einfuehrung von KI-Assistenz in KMU."
   funding: "BMBF"
   duration: "2023–2026"
   tags: ["KI", "Arbeit", "KMU"]
   url: ""
 
 - title: "Autonome Mobile Robotik (AMR-NRW)"
+  slug: "amr-nrw"
   category: "Robotik & Automatisierung"
   status: "laufend"
   description: "Entwicklung und Erprobung autonomer mobiler Robotiksysteme für Intralogistik und Produktionsumgebungen in Kooperation mit regionalen Industriepartnern. Das Projekt adressiert Sicherheit, Mensch-Roboter-Interaktion und Wirtschaftlichkeit."
+  impact: "Verknuepft Sicherheit, Mensch-Roboter-Interaktion und Wirtschaftlichkeit fuer den Praxiseinsatz."
   funding: "Landes NRW / EU-Regionalfonds"
   duration: "2022–2025"
   tags: ["Robotik", "Automatisierung", "Industrie"]
   url: ""
 
 - title: "Plattformökonomie und Arbeit (PLAT-WORK)"
+  slug: "plat-work"
   category: "Digitale Arbeit"
   status: "laufend"
   description: "Empirische Studie zu Arbeitsbedingungen in plattformvermittelten Beschäftigungsformen (Gig Economy). Ziel ist die Entwicklung von Gestaltungsempfehlungen für faire und nachhaltige Plattformarbeit."
+  impact: "Liefert evidenzbasierte Empfehlungen fuer faire und nachhaltige Plattformarbeit."
   funding: "Hans-Böckler-Stiftung"
   duration: "2023–2025"
   tags: ["Plattformarbeit", "Arbeit", "Recht"]
   url: ""
 
 - title: "User Innovation im Gesundheitswesen (INNOV-HEALTH)"
+  slug: "innov-health"
   category: "User Innovation"
   status: "laufend"
   description: "Einbindung von Patientinnen und Patienten sowie medizinischem Personal in die Entwicklung digitaler Gesundheitslösungen. Das Projekt entwickelt methodische Grundlagen für gesundheitliche Ko-Innovation."
+  impact: "Staerkt partizipative Innovationsansaetze fuer patientenzentrierte digitale Gesundheitsloesungen."
   funding: "EU Horizon"
   duration: "2024–2027"
   tags: ["Gesundheit", "User Innovation", "Ko-Produktion"]
   url: ""
 
 - title: "Digitale Transformation im Einzelhandel (DiTEx)"
+  slug: "ditex"
   category: "Digitale Transformation"
   status: "abgeschlossen"
   description: "Analyse der digitalen Transformationspfade stationärer Einzelhändler in der Region Dortmund. Erarbeitung praxistauglicher Empfehlungen für KMU zur Nutzung digitaler Technologien."
+  impact: "Hat konkrete Handlungsempfehlungen fuer die digitale Transformation im regionalen Einzelhandel erarbeitet."
   funding: "Wirtschaftsförderung Dortmund"
   duration: "2022–2024"
   tags: ["Handel", "Transformation", "KMU"]
   url: ""
 
 - title: "Smarte Lernumgebungen in der Hochschule (SMART-LEARN)"
+  slug: "smart-learn"
   category: "Digitale Bildung"
   status: "abgeschlossen"
   description: "Entwicklung und Evaluation adaptiver digitaler Lernumgebungen für die Hochschullehre. Pilotierung an der FH Dortmund mit Studierenden aus verschiedenen Fachbereichen."
+  impact: "Etabliert uebertragbare Konzepte fuer adaptive, lernendenzentrierte digitale Lehre."
   funding: "Stiftung Innovation in der Hochschullehre"
   duration: "2021–2024"
   tags: ["Bildung", "E-Learning", "Hochschule"]

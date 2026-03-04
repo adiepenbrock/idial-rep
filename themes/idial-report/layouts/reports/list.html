@@ -1,32 +1,39 @@
 {{ define "main" }}
+{{ $reports := sort (where .Site.RegularPages "Section" "reports") "Params.year" "desc" }}
 <section class="page-hero page-hero-archive">
   <div class="container">
-    <div class="section-label">Archiv</div>
-    <h1>Alle Jahresberichte</h1>
-    <p>Alle interaktiven Jahresberichte des IDiAL-Instituts im Überblick.</p>
+    <div class="section-label">{{ i18n "archiveLabel" }}</div>
+    <h1>{{ i18n "archiveTitle" }}</h1>
+    <p>{{ i18n "archiveDescription" }}</p>
   </div>
 </section>
 
 <section class="reports-archive">
   <div class="container">
     <div class="archive-grid">
-      {{ range .Site.RegularPages }}
-        {{ if eq .Section "reports" }}
-        <article class="archive-card">
-          <div class="archive-card-year">{{ .Params.year }}</div>
-          <div class="archive-card-content">
-            <h2>{{ .Title }}</h2>
-            <p class="archive-card-tagline">{{ .Params.tagline }}</p>
-            {{ with .Params.summary }}
-            <p class="archive-card-summary">{{ . }}</p>
-            {{ end }}
-            <a href="{{ .RelPermalink }}" class="btn btn-primary">
-              Bericht ansehen
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </a>
-          </div>
-        </article>
-        {{ end }}
+      {{ range $reports }}
+      <article class="archive-card animate-on-scroll">
+        <div class="archive-card-year">{{ .Params.year }}</div>
+        <div class="archive-card-content">
+          <h2>{{ .Title }}</h2>
+          <p class="archive-card-tagline">{{ .Params.tagline }}</p>
+          {{ with .Params.summary }}
+          <p class="archive-card-summary">{{ . }}</p>
+          {{ end }}
+          <a href="{{ .RelPermalink }}" class="btn btn-primary">
+            {{ i18n "viewReport" }}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+      </article>
+      {{ else }}
+      <article class="archive-card">
+        <div class="archive-card-year">--</div>
+        <div class="archive-card-content">
+          <h2>{{ i18n "noReportsTitle" }}</h2>
+          <p class="archive-card-tagline">{{ i18n "noReportsDescription" }}</p>
+        </div>
+      </article>
       {{ end }}
     </div>
   </div>

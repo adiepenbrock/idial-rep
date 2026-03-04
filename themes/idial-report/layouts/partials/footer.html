@@ -3,7 +3,7 @@
     <div class="footer-brand">
       <div class="footer-logo">
         <span class="logo-accent">IDiAL</span>
-        <span class="logo-text">Jahresbericht</span>
+        <span class="logo-text">{{ i18n "brandReport" }}</span>
       </div>
       <p class="footer-tagline">{{ .Site.Params.instituteFullName }}</p>
       <p class="footer-university">
@@ -13,34 +13,35 @@
 
     <div class="footer-links">
       <div class="footer-col">
-        <h4>Jahresberichte</h4>
+        <h4>{{ i18n "reportsMenuLabel" }}</h4>
         <ul>
           {{ range .Site.Menus.main }}
-            {{ if ne .Name "Jahresberichte" }}
-            <li><a href="{{ .URL }}">Jahresbericht {{ .Name }}</a></li>
+            {{ if ne .URL "/reports/" }}
+            <li><a href="{{ .URL | relLangURL }}">{{ i18n "reportWithYear" (dict "Year" .Name) }}</a></li>
             {{ end }}
           {{ end }}
-          <li><a href="/reports/">Alle Berichte</a></li>
+          <li><a href="{{ "/projects/" | relLangURL }}">{{ i18n "projectsNav" }}</a></li>
+          <li><a href="{{ "/reports/" | relLangURL }}">{{ i18n "allReports" }}</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Institut</h4>
+        <h4>{{ i18n "footerInstitute" }}</h4>
         <ul>
           <li><a href="https://www.fh-dortmund.de/idial" target="_blank" rel="noopener">idial.institute</a></li>
-          <li><a href="https://www.fh-dortmund.de" target="_blank" rel="noopener">FH Dortmund</a></li>
+          <li><a href="https://www.fh-dortmund.de" target="_blank" rel="noopener">{{ .Site.Params.university }}</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Rechtliches</h4>
+        <h4>{{ i18n "footerLegal" }}</h4>
         <ul>
-          <li><a href="https://www.fh-dortmund.de/impressum" target="_blank" rel="noopener">Impressum</a></li>
-          <li><a href="https://www.fh-dortmund.de/datenschutz" target="_blank" rel="noopener">Datenschutz</a></li>
-          <li><a href="https://www.fh-dortmund.de/barrierefreiheit" target="_blank" rel="noopener">Barrierefreiheit</a></li>
+          <li><a href="https://www.fh-dortmund.de/impressum" target="_blank" rel="noopener">{{ i18n "imprint" }}</a></li>
+          <li><a href="https://www.fh-dortmund.de/datenschutz" target="_blank" rel="noopener">{{ i18n "privacy" }}</a></li>
+          <li><a href="https://www.fh-dortmund.de/barrierefreiheit" target="_blank" rel="noopener">{{ i18n "accessibility" }}</a></li>
         </ul>
       </div>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>&copy; {{ now.Year }} IDiAL &ndash; Institut für die Digitalisierung von Arbeits- und Lebenswelten, Fachhochschule Dortmund</p>
+    <p>&copy; {{ now.Year }} IDiAL &ndash; {{ .Site.Params.instituteFullName }}, {{ .Site.Params.university }}</p>
   </div>
 </footer>

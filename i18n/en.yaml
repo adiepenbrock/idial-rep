@@ -1,0 +1,317 @@
+- id: brandReport
+  translation: "Annual Report"
+
+- id: navHomeAria
+  translation: "Go to IDiAL annual report homepage"
+
+- id: navOpen
+  translation: "Open navigation"
+
+- id: yearSelectorAria
+  translation: "Select year"
+
+- id: reportsMenuLabel
+  translation: "Reports"
+
+- id: allReports
+  translation: "All reports"
+
+- id: projectsNav
+  translation: "Projects"
+
+- id: languageSwitcher
+  translation: "Switch language"
+
+- id: heroEyebrow
+  translation: "Interactive annual report"
+
+- id: homeHeroDescription
+  translation: "Explore our research, projects, and outcomes of {{ .Year }} in an interactive and engaging way."
+
+- id: discoverAnnualReport
+  translation: "Explore annual report {{ .Year }}"
+
+- id: scrollHint
+  translation: "Scroll"
+
+- id: homeAboutLabel
+  translation: "The institute"
+
+- id: homeAboutTitle
+  translation: "Shaping digitalization &ndash; <br>building the future"
+
+- id: homeAboutDescription
+  translation: "At Dortmund University of Applied Sciences and Arts, IDiAL develops scientific insights and practical solutions to harness digital opportunities and address societal and economic change."
+
+- id: homeAboutAction
+  translation: "Learn more about IDiAL"
+
+- id: homeFocusTitle
+  translation: "Research focus areas"
+
+- id: focusOneTitle
+  translation: "Autonomous mobile systems"
+
+- id: focusOneDescription
+  translation: "Robotics, AI, and automated processes"
+
+- id: focusTwoTitle
+  translation: "Digital work environments"
+
+- id: focusTwoDescription
+  translation: "Transformation of work and organizations"
+
+- id: focusThreeTitle
+  translation: "User innovation"
+
+- id: focusThreeDescription
+  translation: "Integrating users into innovation processes"
+
+- id: homeJourneyLabel
+  translation: "Digital tour"
+
+- id: homeJourneyTitle
+  translation: "Jump into the {{ .Year }} report"
+
+- id: homeJourneyDescription
+  translation: "Navigate directly to key areas and discover the core content of the {{ .Year }} annual report in just a few clicks."
+
+- id: journeyHighlightsDescription
+  translation: "Milestones, awards, and key events."
+
+- id: journeyProjectsDescription
+  translation: "Running initiatives, funding tracks, and application fields."
+
+- id: journeyFactsDescription
+  translation: "Performance in key figures, third-party funding, and publications."
+
+- id: journeyTeamTitle
+  translation: "Team and network"
+
+- id: journeyTeamDescription
+  translation: "The people and collaborations behind the outcomes."
+
+- id: homeReportsTitle
+  translation: "Our reports"
+
+- id: homeReportsDescription
+  translation: "Learn more about our work and outcomes from previous years."
+
+- id: viewReport
+  translation: "View report"
+
+- id: noReportsTitle
+  translation: "No reports available yet"
+
+- id: noReportsDescription
+  translation: "As soon as a new annual report is published, it will appear here in the archive."
+
+- id: archiveLabel
+  translation: "Archive"
+
+- id: archiveTitle
+  translation: "All annual reports"
+
+- id: archiveDescription
+  translation: "Overview of all interactive annual reports by IDiAL."
+
+- id: reportHeroEyebrow
+  translation: "IDiAL annual report"
+
+- id: discoverReport
+  translation: "Explore report"
+
+- id: reportNavLabel
+  translation: "Report sections"
+
+- id: reportActionsLabel
+  translation: "Report actions"
+
+- id: sectionForeword
+  translation: "Foreword"
+
+- id: sectionHighlights
+  translation: "Highlights"
+
+- id: sectionProjects
+  translation: "Projects"
+
+- id: sectionFacts
+  translation: "Facts"
+
+- id: sectionTeam
+  translation: "Team"
+
+- id: sectionPartners
+  translation: "Partners"
+
+- id: sectionContact
+  translation: "Contact"
+
+- id: jumpToProjects
+  translation: "Jump to projects"
+
+- id: toTop
+  translation: "Top"
+
+- id: backToTopAria
+  translation: "Back to top"
+
+- id: downloadPdf
+  translation: "PDF version"
+
+- id: instituteLeadership
+  translation: "Institute management"
+
+- id: forewordGreeting
+  translation: "Dear readers,"
+
+- id: yearInReview
+  translation: "{{ .Year }} in review"
+
+- id: highlightsTitle
+  translation: "Highlights of the year"
+
+- id: highlightsDescription
+  translation: "The most important milestones and events of {{ .Year }} at a glance."
+
+- id: filterAll
+  translation: "All"
+
+- id: learnMore
+  translation: "Learn more"
+
+- id: researchLabel
+  translation: "Research"
+
+- id: projectsTitle
+  translation: "Projects {{ .Year }}"
+
+- id: projectsDescription
+  translation: "Our ongoing and completed research projects - from foundational research to applied development."
+
+- id: projectsTotal
+  translation: "Total projects"
+
+- id: projectsOngoing
+  translation: "Ongoing"
+
+- id: projectsCompleted
+  translation: "Completed"
+
+- id: projectsTopics
+  translation: "Topic clusters"
+
+- id: projectsViewGrid
+  translation: "Cards"
+
+- id: projectsViewList
+  translation: "List"
+
+- id: projectSearchLabel
+  translation: "Search projects"
+
+- id: projectSearchPlaceholder
+  translation: "Search by project, topic, or funding..."
+
+- id: statusOngoing
+  translation: "Ongoing"
+
+- id: statusCompleted
+  translation: "Completed"
+
+- id: projectFunding
+  translation: "Funding"
+
+- id: projectFundingDetailsTitle
+  translation: "Funding information"
+
+- id: projectFundingDetailsDescription
+  translation: "Funding bodies, programs, and framework conditions of the project."
+
+- id: projectFundingAmount
+  translation: "Funding volume"
+
+- id: projectDuration
+  translation: "Duration"
+
+- id: projectTeamTitle
+  translation: "Project team"
+
+- id: projectTeamDescription
+  translation: "Researchers involved in planning, implementation, and evaluation."
+
+- id: projectPartnersTitle
+  translation: "Project partners"
+
+- id: projectPartnersDescription
+  translation: "Collaborating organizations from academia, industry, and society."
+
+- id: projectWebsite
+  translation: "Project website"
+
+- id: projectDetails
+  translation: "Project details"
+
+- id: projectDetailLabel
+  translation: "Project profile"
+
+- id: projectBackToReport
+  translation: "Back to report {{ .Year }}"
+
+- id: overviewLabel
+  translation: "Overview"
+
+- id: factsTitle
+  translation: "Facts and figures {{ .Year }}"
+
+- id: factsDescription
+  translation: "Our institute in numbers - an overview of the key indicators for {{ .Year }}."
+
+- id: peopleLabel
+  translation: "People"
+
+- id: teamTitle
+  translation: "Our team"
+
+- id: teamDescription
+  translation: "The people behind IDiAL - researchers working every day on the digitalization of tomorrow."
+
+- id: networkLabel
+  translation: "Network"
+
+- id: partnersTitle
+  translation: "Collaborations and partners"
+
+- id: partnersDescription
+  translation: "IDiAL collaborates with companies, institutions, and organizations from industry, society, and academia."
+
+- id: contactTitle
+  translation: "Interested in collaborating?"
+
+- id: contactDescription
+  translation: "We welcome collaboration requests, project ideas, and exchange with industry, policy, and society."
+
+- id: contactInstitute
+  translation: "Contact IDiAL"
+
+- id: otherReports
+  translation: "More reports"
+
+- id: reportWithYear
+  translation: "Annual report {{ .Year }}"
+
+- id: footerInstitute
+  translation: "Institute"
+
+- id: footerLegal
+  translation: "Legal"
+
+- id: imprint
+  translation: "Imprint"
+
+- id: privacy
+  translation: "Privacy"
+
+- id: accessibility
+  translation: "Accessibility"
